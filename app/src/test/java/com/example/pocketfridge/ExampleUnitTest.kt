@@ -1,4 +1,4 @@
-package com.example.whatsinthefridge
+package com.example.pocketfridge
 
 import org.junit.Test
 

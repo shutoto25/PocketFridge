@@ -1,7 +1,7 @@
-package com.example.whatsinthefridge.model.repsitory
+package com.example.pocketfridge.model.repsitory
 
-import com.example.whatsinthefridge.model.response.IngredientResponse
-import com.example.whatsinthefridge.model.response.LoginResponse
+import com.example.pocketfridge.model.response.IngredientResponse
+import com.example.pocketfridge.model.response.LoginResponse
 import retrofit2.http.GET
 import retrofit2.http.POST
 import rx.Observable

@@ -1,8 +1,8 @@
-package com.example.whatsinthefridge.view.activity
+package com.example.pocketfridge.view.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.whatsinthefridge.databinding.ActivityTabContentsBinding
+import com.example.pocketfridge.databinding.ActivityTabContentsBinding
 
 /**
  * タブコンテンツ画面.

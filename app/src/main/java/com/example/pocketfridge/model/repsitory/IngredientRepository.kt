@@ -1,6 +1,6 @@
-package com.example.whatsinthefridge.model.repsitory
+package com.example.pocketfridge.model.repsitory
 
-import com.example.whatsinthefridge.model.response.IngredientResponse
+import com.example.pocketfridge.model.response.IngredientResponse
 import rx.Observer
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers

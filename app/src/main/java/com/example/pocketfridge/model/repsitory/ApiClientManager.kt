@@ -1,4 +1,4 @@
-package com.example.whatsinthefridge.model.repsitory
+package com.example.pocketfridge.model.repsitory
 
 import com.google.gson.Gson
 import okhttp3.OkHttpClient

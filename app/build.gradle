@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.whatsinthefridge"
+        applicationId "com.example.pocketfridge"
         minSdkVersion 28
         targetSdkVersion 30
         versionCode 1

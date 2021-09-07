@@ -1,4 +1,4 @@
-package com.example.whatsinthefridge.model.response
+package com.example.pocketfridge.model.response
 
 data class LoginResponse(
     val responseCode: Int,

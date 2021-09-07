@@ -1,11 +1,10 @@
-package com.example.whatsinthefridge.view.activity
+package com.example.pocketfridge.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.whatsinthefridge.R
-import com.example.whatsinthefridge.databinding.ActivityMainBinding
-import com.example.whatsinthefridge.model.repsitory.IngredientRepository
-import com.example.whatsinthefridge.model.response.IngredientResponse
+import com.example.pocketfridge.databinding.ActivityMainBinding
+import com.example.pocketfridge.model.repsitory.IngredientRepository
+import com.example.pocketfridge.model.response.IngredientResponse
 import rx.Observer
 
 /**
