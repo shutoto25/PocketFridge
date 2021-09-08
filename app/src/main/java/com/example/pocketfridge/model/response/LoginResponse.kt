@@ -1,7 +1,13 @@
 package com.example.pocketfridge.model.response
 
+/**
+ * ログイン情報レスポンス.
+ */
 data class LoginResponse(
-    val responseCode: Int,
+    /** Httpレスポンスコード. */
+    val httpResponseCode: Int,
+    /** 取得結果コード. */
     val resultCode: Int,
-    val loginCode: String
+    /** ログインId. */
+    val loginId: String
 )
