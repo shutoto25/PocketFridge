@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pocketfridge.databinding.IngredientItemBinding
+import com.example.pocketfridge.model.response.IngredientData
 
 /**
  * list item adapter.
  */
-class RecyclerAdapter(private val dataList: MutableList<String>?) :
+class RecyclerAdapter(private val dataList: ArrayList<IngredientData>?) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     companion object {
@@ -31,8 +32,9 @@ class RecyclerAdapter(private val dataList: MutableList<String>?) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         Log.d(TAG, "onBindViewHolder() called with: viewHolder = $viewHolder")
         dataList?.let {
-            val data = dataList[position]
-            viewHolder.bind(data)
+            val ingredientData = it[position]
+            viewHolder.bind(ingredientData)
+            viewHolder.setItemMargin(position)
         }
     }
 
@@ -47,9 +49,18 @@ class RecyclerAdapter(private val dataList: MutableList<String>?) :
         RecyclerView.ViewHolder(binding.root) {
 
         /** ビューバインド. */
-        fun bind(text: String) {
-            Log.d(TAG, "ViewHolder bind() called with: text = $text")
-            binding.listItemText.text = text
+        fun bind(data: IngredientData) {
+            Log.d(TAG, "ViewHolder bind() called with: data = $data")
+            binding.ingredientName.text = data.name
+            binding.useByDate.text = data.useByDate
+//            binding.imageView.drawable = data.name
+            binding.left.text = data.left.toString()
+        }
+
+        fun setItemMargin(position: Int) {
+            val layoutParams = binding.listLayout.layoutParams as ViewGroup.MarginLayoutParams
+            val marginTop = if (position != 0) 20 else 5
+            layoutParams.topMargin = marginTop
         }
     }
 }

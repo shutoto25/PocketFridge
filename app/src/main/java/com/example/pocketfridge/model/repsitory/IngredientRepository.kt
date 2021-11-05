@@ -9,11 +9,9 @@ class IngredientRepository {
 
     fun fetch(observer: Observer<IngredientResponse>) {
 
-        // 適当なものに変えてとりあえず接続ができるかかくにんする　天気とか
-
         ApiClientManager()
-            .getApiClient("https://192.168.0.16/")
-            .getAllIngredient()
+            .getApiClient("https://server-side-fridge-api.herokuapp.com/")
+            .ingredientInfo()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.newThread())
             .subscribe(observer)

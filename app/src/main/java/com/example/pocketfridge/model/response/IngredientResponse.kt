@@ -4,12 +4,10 @@ package com.example.pocketfridge.model.response
  * 食材一覧レスポンス.
  */
 data class IngredientResponse(
-    /** Httpレスポンスコード. */
-    val httpResponseCode: Int,
     /** 取得結果コード. */
-    val resultCode: Int,
+    val resultCode: Int?,
     /** 食材一覧. */
-    val IngredientList: ArrayList<IngredientData>,
+    val IngredientList: ArrayList<IngredientData>?,
 )
 
 /**
@@ -21,9 +19,9 @@ data class IngredientData(
     /** ジャンル. */
     val genre: String,
     /** 期限. */
-    val useByDate: String,
+    val useByDate: String?,
     /** 食材写真. */
     val image: String?,
     /** 残量パーセント(left/100). */
-    val left: Int,
+    val left: Int?,
 )

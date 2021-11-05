@@ -1,11 +1,14 @@
 package com.example.pocketfridge.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pocketfridge.databinding.ActivityTabContentsBinding
 import com.example.pocketfridge.model.repsitory.IngredientRepository
+import com.example.pocketfridge.model.response.IngredientData
 import com.example.pocketfridge.model.response.IngredientResponse
 import com.example.pocketfridge.view.adapter.TabContentsPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -22,7 +25,7 @@ class TabContentsActivity : AppCompatActivity() {
     }
 
     /** pageAdapter. */
-    private val viewPagerAdapter by lazy { TabContentsPagerAdapter(this) }
+    private lateinit var viewPagerAdapter: TabContentsPagerAdapter
 
     /** viewBinding. */
     private lateinit var binding: ActivityTabContentsBinding
@@ -37,6 +40,20 @@ class TabContentsActivity : AppCompatActivity() {
 
         IngredientRepository().fetch(createObserver())
 
+        // fabのリスナ設定.
+        binding.fab.setOnClickListener {
+            val intent = Intent(this, AddActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+
+    /* -------------- UI関連 ------------------ */
+    private fun updateList(dataList: ArrayList<IngredientData>) {
+        Log.d(TAG, "updateList() called")
+
+        viewPagerAdapter = TabContentsPagerAdapter(this, dataList)
+
         // viewPager初期化.
         binding.viewPager.apply {
             // アダプタ.
@@ -49,26 +66,47 @@ class TabContentsActivity : AppCompatActivity() {
 
         // viewPagerとtabLayoutを紐付け.
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = position.toString()
+            tab.text = when (position) {
+                0 -> "all"
+                1 -> "meat"
+                2 -> "vegetable"
+                3 -> "fish"
+                4 -> "Refrigerate"
+                5 -> "frozen"
+                6 -> "others"
+                else -> "" // ありえない
+            }
         }.attach()
+    }
 
-        // fabのリスナ設定.
-        binding.fab.setOnClickListener {
-            // 追加画面起動
+    private fun setVisibility(dataList: ArrayList<IngredientData>?) {
+        Log.d(TAG, "setVisibility() called")
+
+        if (dataList.isNullOrEmpty()) {
+            binding.noData.visibility = View.VISIBLE
+            binding.viewPager.visibility = View.GONE
+        } else {
+            binding.noData.visibility = View.GONE
+            binding.viewPager.visibility = View.VISIBLE
         }
-
     }
 
 
     /** observer作成. */
     private fun createObserver() = object : Observer<IngredientResponse> {
-        override fun onNext(t: IngredientResponse?) {
+        override fun onNext(response: IngredientResponse) {
+            Log.d(TAG, "Observer.onNext() called with: response = $response")
+            if (response.resultCode == 0) {
+                response.IngredientList?.let { updateList(it) }
+            }
         }
-
-        override fun onError(e: Throwable?) {
+        override fun onError(error: Throwable?) {
+            Log.d(TAG, "Observer.onError() called with: error = $error")
+            setVisibility(null)
         }
 
         override fun onCompleted() {
+            Log.d(TAG, "Observer.onCompleted() called")
         }
     }
 }

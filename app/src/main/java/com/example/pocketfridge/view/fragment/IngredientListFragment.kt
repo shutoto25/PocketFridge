@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pocketfridge.databinding.FragmentIngredientListBinding
+import com.example.pocketfridge.model.response.IngredientData
 import com.example.pocketfridge.view.adapter.RecyclerAdapter
-import kotlin.math.log
 
 /**
  * 食材一覧表示Fragment.
  */
-class IngredientListFragment : Fragment() {
+class IngredientListFragment(private val mapDataList: ArrayList<IngredientData>) : Fragment() {
 
     companion object {
         /** ログ出力タグ. */
@@ -41,8 +41,7 @@ class IngredientListFragment : Fragment() {
         Log.d(TAG, "onViewCreated() called")
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        val ms = mutableListOf("a", "b", "c")
-        recyclerAdapter = RecyclerAdapter(ms)
+        recyclerAdapter = RecyclerAdapter(mapDataList)
         binding.recyclerView.adapter = recyclerAdapter
         recyclerAdapter!!.notifyDataSetChanged()
     }
@@ -58,5 +57,4 @@ class IngredientListFragment : Fragment() {
         // メモリリーク対策のため、本契機でbindingを破棄する.
         _binding = null
     }
-
 }

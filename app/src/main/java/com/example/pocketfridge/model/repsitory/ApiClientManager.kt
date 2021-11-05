@@ -22,8 +22,8 @@ class ApiClientManager {
     private fun getClient() =
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(1000, TimeUnit.SECONDS)
+            .readTimeout(1000, TimeUnit.SECONDS)
             .build()
 
 }
