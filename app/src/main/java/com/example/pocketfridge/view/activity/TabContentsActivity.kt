@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pocketfridge.databinding.ActivityTabContentsBinding
 import com.example.pocketfridge.model.repsitory.IngredientRepository
@@ -13,6 +14,7 @@ import com.example.pocketfridge.model.response.IngredientResponse
 import com.example.pocketfridge.view.adapter.TabContentsPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import rx.Observer
+
 
 /**
  * タブコンテンツ画面.
@@ -38,7 +40,8 @@ class TabContentsActivity : AppCompatActivity() {
         binding = ActivityTabContentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        IngredientRepository().fetch(createObserver())
+        binding.progressCircular.visibility = View.VISIBLE
+        IngredientRepository().getAll(createObserver())
 
         // fabのリスナ設定.
         binding.fab.setOnClickListener {
@@ -46,6 +49,20 @@ class TabContentsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // pull to refresh.
+        binding.swipeRefresh.setOnRefreshListener {
+            IngredientRepository().getAll(createObserver())
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart() called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume() called")
     }
 
     /* -------------- UI関連 ------------------ */
@@ -99,10 +116,15 @@ class TabContentsActivity : AppCompatActivity() {
             if (response.resultCode == 0) {
                 response.IngredientList?.let { updateList(it) }
             }
+            binding.progressCircular.visibility = View.GONE
+
+            // pull to refreshのローディングをとめる.
+            if (binding.swipeRefresh.isRefreshing) {
+                binding.swipeRefresh.isRefreshing = false
+            }
         }
         override fun onError(error: Throwable?) {
             Log.d(TAG, "Observer.onError() called with: error = $error")
-            setVisibility(null)
         }
 
         override fun onCompleted() {

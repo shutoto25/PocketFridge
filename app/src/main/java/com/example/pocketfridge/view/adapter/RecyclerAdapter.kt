@@ -6,6 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pocketfridge.databinding.IngredientItemBinding
 import com.example.pocketfridge.model.response.IngredientData
+import com.example.pocketfridge.view.activity.AddActivity
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * list item adapter.
@@ -52,8 +56,7 @@ class RecyclerAdapter(private val dataList: ArrayList<IngredientData>?) :
         fun bind(data: IngredientData) {
             Log.d(TAG, "ViewHolder bind() called with: data = $data")
             binding.ingredientName.text = data.name
-            binding.useByDate.text = data.useByDate
-//            binding.imageView.drawable = data.name
+//            binding.useByDate.text = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN).format(Date(data.useByDate))
             binding.left.text = data.left.toString()
         }
 

@@ -8,22 +8,32 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+/**
+ * API client manager.
+ */
 class ApiClientManager {
 
-    fun getApiClient(endpoint: String) :ApiClient =
-        Retrofit.Builder()
-            .client(getClient())
-            .baseUrl(endpoint)
-            .addConverterFactory(GsonConverterFactory.create(Gson()))
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-            .build()
-            .create(ApiClient::class.java)
+    companion object {
+        /** 通信タイムアウト. */
+        const val TIME_OUT: Long = 120
+    }
 
+    /** Apiクライアント. */
+    fun getApiClient(endpoint: String): ApiClient =
+            Retrofit.Builder()
+                    .client(getClient())
+                    .baseUrl(endpoint)
+                    .addConverterFactory(GsonConverterFactory.create(Gson()))
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .build()
+                    .create(ApiClient::class.java)
+
+    /** OkHttpクライアント/ */
     private fun getClient() =
-        OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .connectTimeout(1000, TimeUnit.SECONDS)
-            .readTimeout(1000, TimeUnit.SECONDS)
-            .build()
-
+            OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor()
+                            .setLevel(HttpLoggingInterceptor.Level.BODY))
+                    .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+                    .readTimeout(TIME_OUT, TimeUnit.SECONDS)
+                    .build()
 }
