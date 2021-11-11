@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding = "10dp"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <ImageView
@@ -18,17 +17,17 @@
         android:layout_toEndOf="@+id/imageView"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/ingredientName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/useByDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

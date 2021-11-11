@@ -8,6 +8,7 @@ import com.example.pocketfridge.databinding.ActivityMainBinding
 
 /**
  * スタート画面.
+ * TODO ログイン系はFirebaseで実装予定
  */
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding.button.setOnClickListener {
             val intent = Intent(this, TabContentsActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

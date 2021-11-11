@@ -40,7 +40,7 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(binding.root)
 
         binding.date.setOnClickListener(this)
-        binding.addButton.setOnClickListener(this)
+        binding.fabAdd.setOnClickListener(this)
     }
 
 
@@ -67,7 +67,7 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             // 追加ボタン.
-            binding.addButton -> {
+            binding.fabAdd -> {
                 val requestBody = createRequestBody()
                 requestBody?.let {
                     IngredientRepository().post(createObserver(), requestBody)

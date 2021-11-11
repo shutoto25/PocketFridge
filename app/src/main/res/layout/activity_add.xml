@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="30dp">
+    android:layout_height="match_parent">
 
     <!-- 食材名 -->
     <LinearLayout
@@ -48,7 +47,7 @@
             android:layout_marginEnd="15dp"
             android:src="@drawable/ic_expired" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -118,7 +117,6 @@
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 
-
     <!-- 残りパーセント -->
     <LinearLayout
         android:id="@+id/left"
@@ -150,13 +148,16 @@
     </LinearLayout>
 
     <!-- 登録ボタン -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/addButton"
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
         android:layout_marginBottom="20dp"
         android:text="put in the fridge"
-        app:cornerRadius="28dp" />
+        app:fabSize="auto" />
 </RelativeLayout>
