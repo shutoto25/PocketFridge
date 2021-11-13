@@ -51,7 +51,7 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
             // 日付.
             binding.date -> {
                 val selection =
-                        if (binding.date.text == "yyyy/MM/dd") {
+                        if (binding.date.text.isNullOrEmpty()) {
                             Calendar.getInstance().timeInMillis
                         } else {
                             date
@@ -61,7 +61,7 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
                         .build().apply {
                             addOnPositiveButtonClickListener { time: Long ->
                                 date = time
-                                binding.date.text = format.format(Date(time))
+                                binding.date.setText(format.format(Date(time)))
                             }
                         }.show(supportFragmentManager, "Tag")
             }

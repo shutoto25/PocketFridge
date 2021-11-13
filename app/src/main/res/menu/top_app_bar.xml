@@ -3,15 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_search"
-        android:title="search icon"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/notification"
         android:icon="@drawable/ic_notifications"
         android:title="notification icon"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_filter"
+        android:title="filter icon"
+        app:showAsAction="always" />
 </menu>

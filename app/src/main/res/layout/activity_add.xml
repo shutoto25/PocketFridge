@@ -4,18 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 食材名 -->
-    <LinearLayout
-        android:id="@+id/ingredientName"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/top_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="add screen title"
+        android:textSize="20dp" />
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_ingredient" />
+    <!-- 食材名 -->
+    <LinearLayout
+        android:id="@+id/name_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_title"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:orientation="vertical">
 
         <!-- TODO こいつのフォーカスとキーボード制御が必要 -->
         <com.google.android.material.textfield.TextInputLayout
@@ -27,7 +34,7 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ingredient"
+                android:hint="name"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -37,23 +44,28 @@
         android:id="@+id/expired"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ingredientName"
-        android:layout_marginTop="15dp"
+        android:layout_below="@+id/name_area"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_expired" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/date"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusableInTouchMode="true"
-            android:gravity="center_vertical"
-            android:text="yyyy/MM/dd" />
+            android:layout_height="wrap_content"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_expired"
+            app:endIconMode="custom">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="expired"
+                android:focusableInTouchMode="false"/>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <!-- 食材名 -->
@@ -62,14 +74,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/expired"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal">
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="30dp"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_genre" />
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="select genre" />
 
         <!-- TODO 複数ジャンルを設定できるようにしたいが、修正が多いので一旦シングルのみで -->
         <com.google.android.material.chip.ChipGroup
@@ -123,14 +136,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/genreChips"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal">
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="30dp"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_left" />
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="choose left" />
 
         <com.google.android.material.slider.Slider
             android:id="@+id/percent"
@@ -139,12 +153,9 @@
             android:focusableInTouchMode="true"
             android:stepSize="10.0"
             android:valueFrom="0.0"
-            android:valueTo="100.0" />
+            android:valueTo="100.0"
+            android:value="100.0"/>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_add_button" />
     </LinearLayout>
 
     <!-- 登録ボタン -->
@@ -155,9 +166,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="60dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="40dp"
         android:text="put in the fridge"
         app:fabSize="auto" />
 </RelativeLayout>
