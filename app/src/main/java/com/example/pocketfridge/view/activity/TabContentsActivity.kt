@@ -1,19 +1,24 @@
 package com.example.pocketfridge.view.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.example.pocketfridge.AppConst
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.ActivityTabContentsBinding
 import com.example.pocketfridge.model.repsitory.IngredientRepository
 import com.example.pocketfridge.model.response.IngredientData
 import com.example.pocketfridge.model.response.IngredientResponse
 import com.example.pocketfridge.view.adapter.TabContentsPagerAdapter
+import com.example.pocketfridge.view.fragment.IngredientListFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
 import rx.Observer
@@ -23,7 +28,8 @@ import rx.Observer
  * タブコンテンツ画面.
  */
 class TabContentsActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener {
+    NavigationView.OnNavigationItemSelectedListener,
+    IngredientListFragment.ItemClickCallbackListener {
 
     companion object {
         /** ログ出力タグ. */
@@ -36,6 +42,17 @@ class TabContentsActivity : AppCompatActivity(),
     /** viewBinding. */
     private lateinit var binding: ActivityTabContentsBinding
 
+    /** startActivityForResult. */
+    private val startForResult =
+        registerForActivityResult(StartActivityForResult()) { result: ActivityResult? ->
+            if (result?.resultCode == Activity.RESULT_OK) {
+                result.data?.let { data: Intent ->
+                    if (data.getBooleanExtra(AppConst.INTENT_FLAG_REQUEST, false)) {
+                        getAllIngredient()
+                    }
+                }
+            }
+        }
 
     /* -------------- life cycle ------------------ */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,14 +64,13 @@ class TabContentsActivity : AppCompatActivity(),
 
         // リスナー登録.
         setListeners()
+
+        getAllIngredient()
     }
 
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart() called")
-
-        setProgressCircular(true)
-        IngredientRepository().getAll(createObserver())
     }
 
     override fun onResume() {
@@ -127,15 +143,22 @@ class TabContentsActivity : AppCompatActivity(),
         binding.navigationView.setNavigationItemSelectedListener(this)
 
         // fabのリスナ設定.
-        binding.fab.setOnClickListener {
-            val intent = Intent(this, AddActivity::class.java)
-            startActivity(intent)
-        }
+        binding.fab.setOnClickListener { launchAddActivity(null) }
 
         // pull to refresh.
         binding.swipeRefresh.setOnRefreshListener {
             IngredientRepository().getAll(createObserver())
         }
+    }
+
+    /** 追加画面を起動. */
+    private fun launchAddActivity(data: IngredientData?) {
+        Log.d(TAG, "launchAddActivity() called")
+        val intent = Intent(this, AddActivity::class.java)
+        data?.let {
+            intent.apply { putExtra(AppConst.INTENT_FLAG_FIX_DATA, data) }
+        }
+        startForResult.launch(intent)
     }
 
     /** ドロワーメニューリスナー設定. */
@@ -144,7 +167,21 @@ class TabContentsActivity : AppCompatActivity(),
     }
 
 
+    override fun itemClickCallback(data: IngredientData) {
+        Log.d(TAG, "itemClickCallback() called with: data = $data")
+        launchAddActivity(data)
+    }
+
+
     /* -------------- server connection ------------------ */
+    /** */
+    private fun getAllIngredient() {
+        Log.d(TAG, "getAllIngredient() called")
+        setProgressCircular(true)
+        IngredientRepository().getAll(createObserver())
+    }
+
+
     /** observer作成. */
     private fun createObserver() = object : Observer<IngredientResponse> {
         override fun onNext(response: IngredientResponse) {

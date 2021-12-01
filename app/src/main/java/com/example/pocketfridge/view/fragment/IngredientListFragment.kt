@@ -14,7 +14,13 @@ import com.example.pocketfridge.view.adapter.RecyclerAdapter
 /**
  * 食材一覧表示Fragment.
  */
-class IngredientListFragment(private val mapDataList: ArrayList<IngredientData>) : Fragment() {
+class IngredientListFragment(private val mapDataList: ArrayList<IngredientData>) : Fragment(),
+    RecyclerAdapter.OnItemClickListener {
+
+    /** コールバックリスナー. */
+    interface ItemClickCallbackListener {
+        fun itemClickCallback(data: IngredientData)
+    }
 
     companion object {
         /** ログ出力タグ. */
@@ -25,8 +31,11 @@ class IngredientListFragment(private val mapDataList: ArrayList<IngredientData>)
     private var _binding: FragmentIngredientListBinding? = null
     private val binding get() = _binding!!
 
+    /** RecyclerAdapter. */
     private var recyclerAdapter: RecyclerAdapter? = null
 
+    /** Listener. */
+    private var listener: ItemClickCallbackListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -40,8 +49,13 @@ class IngredientListFragment(private val mapDataList: ArrayList<IngredientData>)
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
 
+        if (activity is ItemClickCallbackListener) {
+            listener = activity as ItemClickCallbackListener
+        }
+
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerAdapter = RecyclerAdapter(mapDataList)
+        recyclerAdapter!!.setOnItemClickListener(this)
         binding.recyclerView.adapter = recyclerAdapter
         recyclerAdapter!!.notifyDataSetChanged()
     }
@@ -56,5 +70,10 @@ class IngredientListFragment(private val mapDataList: ArrayList<IngredientData>)
         }
         // メモリリーク対策のため、本契機でbindingを破棄する.
         _binding = null
+    }
+
+    override fun onListItemClick(data: IngredientData) {
+        Log.d(TAG, "onListItemClick() called with: data = $data")
+        listener?.itemClickCallback(data)
     }
 }

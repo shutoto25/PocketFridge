@@ -6,16 +6,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pocketfridge.databinding.IngredientItemBinding
 import com.example.pocketfridge.model.response.IngredientData
-import com.example.pocketfridge.view.activity.AddActivity
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
+
 
 /**
  * list item adapter.
  */
 class RecyclerAdapter(private val dataList: ArrayList<IngredientData>?) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+
+    /**
+     * クリックリスナーインターフェース.
+     */
+    interface OnItemClickListener {
+        fun onListItemClick(data: IngredientData)
+    }
 
     companion object {
         /** ログ出力タグ. */
@@ -24,6 +28,9 @@ class RecyclerAdapter(private val dataList: ArrayList<IngredientData>?) :
 
     /** ビューバインディング. */
     private lateinit var binding: IngredientItemBinding
+
+    /** リストアイテムクリックリスナー. */
+    private lateinit var listener: OnItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         Log.d(TAG, "onCreateViewHolder() called")
@@ -39,11 +46,17 @@ class RecyclerAdapter(private val dataList: ArrayList<IngredientData>?) :
             val ingredientData = it[position]
             viewHolder.bind(ingredientData)
             viewHolder.setItemMargin(position)
+            binding.root.setOnClickListener { listener.onListItemClick(ingredientData) }
         }
     }
 
     /** アイテム数を返す. */
     override fun getItemCount(): Int = dataList?.size ?: 0
+
+    /** リスナーセット. */
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
+    }
 
 
     /**
