@@ -1,81 +1,61 @@
-package com.example.pocketfridge.view.activity
+package com.example.pocketfridge.view.fragment
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.example.pocketfridge.AppConst
 import com.example.pocketfridge.R
-import com.example.pocketfridge.databinding.ActivityTabContentsBinding
+import com.example.pocketfridge.databinding.FragmentTabBinding
 import com.example.pocketfridge.model.repsitory.IngredientRepository
 import com.example.pocketfridge.model.response.IngredientData
 import com.example.pocketfridge.model.response.IngredientResponse
 import com.example.pocketfridge.view.adapter.TabContentsPagerAdapter
-import com.example.pocketfridge.view.fragment.IngredientListFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
 import rx.Observer
 
-
 /**
- * タブコンテンツ画面.
+ * タブFragment.
  */
-class TabContentsActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener,
-    IngredientListFragment.ItemClickCallbackListener {
+class TabFragment : Fragment(),
+    NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
         /** ログ出力タグ. */
-        private const val TAG = "TabContentsActivity"
+        private const val TAG = "TabFragment"
     }
 
     /** pageAdapter. */
     private lateinit var viewPagerAdapter: TabContentsPagerAdapter
 
-    /** viewBinding. */
-    private lateinit var binding: ActivityTabContentsBinding
+    /** view model. */
 
-    /** startActivityForResult. */
-    private val startForResult =
-        registerForActivityResult(StartActivityForResult()) { result: ActivityResult? ->
-            if (result?.resultCode == Activity.RESULT_OK) {
-                result.data?.let { data: Intent ->
-                    if (data.getBooleanExtra(AppConst.INTENT_FLAG_REQUEST, false)) {
-                        getAllIngredient()
-                    }
-                }
-            }
-        }
+    /** dataBinding. */
+    private var _binding: FragmentTabBinding? = null
+    private val binding get() = _binding!!
 
     /* -------------- life cycle ------------------ */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate() called")
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        Log.d(TAG, "onCreateView() called")
 
-        binding = ActivityTabContentsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
+        _binding = FragmentTabBinding.inflate(inflater, container, false)
         // リスナー登録.
         setListeners()
-
         getAllIngredient()
+        return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart() called")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume() called")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated() called")
     }
 
     /* -------------- UI ------------------ */
@@ -83,7 +63,7 @@ class TabContentsActivity : AppCompatActivity(),
     private fun updateList(dataList: ArrayList<IngredientData>) {
         Log.d(TAG, "updateList() called")
 
-        viewPagerAdapter = TabContentsPagerAdapter(this, dataList)
+        viewPagerAdapter = TabContentsPagerAdapter(requireActivity(), dataList)
 
         // viewPager初期化.
         binding.viewPager.apply {
@@ -123,7 +103,7 @@ class TabContentsActivity : AppCompatActivity(),
     }
 
     /** プログレスサークス設定. */
-    private fun setProgressCircular(isStart :Boolean) {
+    private fun setProgressCircular(isStart: Boolean) {
         Log.d(TAG, "setProgressCircular() called with: isStart = $isStart")
         binding.progressCircular.visibility = if (isStart) View.VISIBLE else View.GONE
     }
@@ -133,45 +113,32 @@ class TabContentsActivity : AppCompatActivity(),
         Log.d(TAG, "setListeners() called")
         // ドロワーリスナー設定.
         val toggle = ActionBarDrawerToggle(
-            this,
+            activity,
             binding.drawerLayout,
             binding.topAppBar,
             R.string.nav_open,
-            R.string.nav_close)
+            R.string.nav_close
+        )
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         binding.navigationView.setNavigationItemSelectedListener(this)
-
-        // fabのリスナ設定.
-        binding.fab.setOnClickListener { launchAddActivity(null) }
 
         // pull to refresh.
         binding.swipeRefresh.setOnRefreshListener {
             IngredientRepository().getAll(createObserver())
         }
+
+        // fabのリスナ設定.
+        binding.fab.setOnClickListener {
+            findNavController().navigate(R.id.action_tab_to_detail)
+        }
     }
 
-    /** 追加画面を起動. */
-    private fun launchAddActivity(data: IngredientData?) {
-        Log.d(TAG, "launchAddActivity() called")
-        val intent = Intent(this, AddActivity::class.java)
-        data?.let {
-            intent.apply { putExtra(AppConst.INTENT_FLAG_FIX_DATA, data) }
-        }
-        startForResult.launch(intent)
-    }
 
     /** ドロワーメニューリスナー設定. */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return false
     }
-
-
-    override fun itemClickCallback(data: IngredientData) {
-        Log.d(TAG, "itemClickCallback() called with: data = $data")
-        launchAddActivity(data)
-    }
-
 
     /* -------------- server connection ------------------ */
     /** */

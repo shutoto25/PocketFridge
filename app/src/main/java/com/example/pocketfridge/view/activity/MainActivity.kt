@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     /** viewBinding. */
     private lateinit var binding: ActivityMainBinding
 
+
+    /* -------------- life cycle ------------------ */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate() called")
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.button.setOnClickListener {
-            val intent = Intent(this, TabContentsActivity::class.java)
+            val intent = Intent(this, BaseActivity::class.java)
             startActivity(intent)
             finish()
         }

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.pocketfridge.model.response.IngredientData
-import com.example.pocketfridge.view.fragment.IngredientListFragment
+import com.example.pocketfridge.view.fragment.ListFragment
 
 /**
  * tab pager adapter.
@@ -27,7 +27,7 @@ class TabContentsPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         Log.d(TAG, "createFragment() called with: position = $position")
-        return IngredientListFragment(mapData(position))
+        return ListFragment(mapData(position))
     }
 
     /** ジャンルごとにデータをMap. */

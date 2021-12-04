@@ -22,7 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.TabContentsActivity" />
-        <activity android:name=".view.activity.AddActivity" />
+        <activity android:name=".view.activity.BaseActivity" />
     </application>
 </manifest>

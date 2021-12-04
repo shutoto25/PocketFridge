@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/informationFragment">
+
+    <fragment
+        android:id="@+id/informationFragment"
+        android:name="com.example.pocketfridge.view.fragment.InformationFragment"
+        android:label="fragment_information"
+        tools:layout="@layout/fragment_information">
+        <action
+            android:id="@+id/action_info_to_list"
+            app:destination="@id/tabFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tabFragment"
+        android:name="com.example.pocketfridge.view.fragment.TabFragment"
+        android:label="fragment_tab"
+        tools:layout="@layout/fragment_tab">
+        <action
+            android:id="@+id/action_tab_to_detail"
+            app:destination="@id/ingredientFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ingredientFragment"
+        android:name="com.example.pocketfridge.view.fragment.IngredientFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_ingredient" >
+        <action
+            android:id="@+id/action_detail_to_tab"
+            app:destination="@id/tabFragment" />
+    </fragment>
+</navigation>

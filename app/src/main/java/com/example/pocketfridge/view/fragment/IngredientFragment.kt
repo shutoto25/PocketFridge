@@ -1,14 +1,18 @@
-package com.example.pocketfridge.view.activity
+package com.example.pocketfridge.view.fragment
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.pocketfridge.AppConst
-import com.example.pocketfridge.databinding.ActivityAddBinding
+import com.example.pocketfridge.R
+import com.example.pocketfridge.databinding.FragmentIngredientBinding
 import com.example.pocketfridge.model.repsitory.IngredientRepository
 import com.example.pocketfridge.model.response.IngredientData
 import com.example.pocketfridge.model.response.IngredientResponse
@@ -22,11 +26,12 @@ import java.util.*
 /**
  * 食材追加画面.
  */
-class AddActivity : AppCompatActivity(), View.OnClickListener {
+class IngredientFragment : Fragment(),
+    View.OnClickListener {
 
     companion object {
         /** ログ出力タグ. */
-        private const val TAG = "AddActivity"
+        private const val TAG = "IngredientFragment"
 
         private const val DATE_FORMAT = "yyyy/MM/dd"
     }
@@ -34,29 +39,30 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
     private var longDate: Long = 0
     private val format = SimpleDateFormat(DATE_FORMAT, Locale.JAPAN)
 
+    /** view model. */
+
     /** viewBinding. */
-    private lateinit var binding: ActivityAddBinding
+    private var _binding: FragmentIngredientBinding? = null
+    private val binding get() = _binding!!
 
     /** 修正データ. */
     private var fixData: IngredientData? = null
 
 
     /* -------------- life cycle ------------------ */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate() called")
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentIngredientBinding.inflate(inflater, container, false)
 
-        binding = ActivityAddBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        binding.date.setOnClickListener(this)
-        binding.fabAdd.setOnClickListener(this)
-        binding.fabDelete.setOnClickListener(this)
-
-        val intentData = intent.getSerializableExtra(AppConst.INTENT_FLAG_FIX_DATA)
-        intentData?.let { fixData = intentData as IngredientData }
+        setListeners()
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated() called")
+    }
 
     override fun onStart() {
         super.onStart()
@@ -90,6 +96,13 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
 
 
     /* -------------- UI ------------------ */
+    private fun setListeners() {
+        Log.d(TAG, "setListeners() called")
+        binding.date.setOnClickListener(this)
+        binding.fabAdd.setOnClickListener(this)
+        binding.fabDelete.setOnClickListener(this)
+    }
+
     override fun onClick(view: View) {
         Log.d(TAG, "onClick() called with: view = $view")
 
@@ -109,11 +122,12 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
                             longDate = time
                             binding.date.setText(format.format(Date(time)))
                         }
-                    }.show(supportFragmentManager, "Tag")
+                    }.show(parentFragmentManager, "Tag")
             }
 
             // 追加ボタン.
             binding.fabAdd -> {
+                findNavController().navigate(R.id.action_detail_to_tab)
                 val requestBody = createRequestBody()
                 requestBody?.let {
                     IngredientRepository().post(createObserver(), requestBody)
@@ -132,15 +146,13 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
             binding.fabDelete -> {
 //                IngredientRepository().delete(createObserver(), fixData!!.id)
                 val intent = Intent().apply { putExtra(AppConst.INTENT_FLAG_REQUEST, true) }
-                setResult(Activity.RESULT_OK, intent)
-                finish()
             }
         }
     }
 
     /** 編集終了. */
     private fun finishEdit(isUpdate: Boolean) {
-        if(isUpdate) {
+        if (isUpdate) {
 
         } else {
 
@@ -178,8 +190,6 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
         override fun onNext(response: IngredientResponse) {
             Log.d(TAG, "Observer.onNext() called with: response = $response")
             val intent = Intent().apply { putExtra(AppConst.INTENT_FLAG_REQUEST, true) }
-            setResult(Activity.RESULT_OK, intent)
-            finish()
         }
 
         override fun onError(error: Throwable?) {
@@ -191,5 +201,4 @@ class AddActivity : AppCompatActivity(), View.OnClickListener {
             Log.d(TAG, "Observer.onCompleted() called")
         }
     }
-
 }
