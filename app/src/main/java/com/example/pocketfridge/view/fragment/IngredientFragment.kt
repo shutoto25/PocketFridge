@@ -1,6 +1,5 @@
 package com.example.pocketfridge.view.fragment
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,13 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.pocketfridge.AppConst
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentIngredientBinding
+import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.repsitory.IngredientRepository
-import com.example.pocketfridge.model.response.IngredientData
 import com.example.pocketfridge.model.response.IngredientResponse
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -24,7 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * 食材追加画面.
+ * 食材詳細画面.
  */
 class IngredientFragment : Fragment(),
     View.OnClickListener {
@@ -35,27 +36,24 @@ class IngredientFragment : Fragment(),
 
         private const val DATE_FORMAT = "yyyy/MM/dd"
     }
-
+//    TODO fragment navigationで値を渡せるようにしたいが、
+//     viewModelのせいでrebuildが通らなくてできないので後に回す
+//    private val args: IngreientFragmentArgs by navArgs()
     private var longDate: Long = 0
     private val format = SimpleDateFormat(DATE_FORMAT, Locale.JAPAN)
 
-    /** view model. */
-
-    /** viewBinding. */
-    private var _binding: FragmentIngredientBinding? = null
-    private val binding get() = _binding!!
+    /** Binding. */
+    private lateinit var binding: FragmentIngredientBinding
 
     /** 修正データ. */
-    private var fixData: IngredientData? = null
+    private var fix: Ingredient? = null
 
 
     /* -------------- life cycle ------------------ */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentIngredientBinding.inflate(inflater, container, false)
-
-        setListeners()
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ingredient, container, false)
         return binding.root
     }
 
@@ -69,7 +67,7 @@ class IngredientFragment : Fragment(),
         Log.d(TAG, "onStart() called")
 
         // 修正画面時のみデータを設定.
-        fixData?.let {
+        fix?.let {
             binding.name.setText(it.name)
             when (it.genre) {
                 "1" -> binding.chipChildMeat.isChecked = true
@@ -130,7 +128,7 @@ class IngredientFragment : Fragment(),
                 findNavController().navigate(R.id.action_detail_to_tab)
                 val requestBody = createRequestBody()
                 requestBody?.let {
-                    IngredientRepository().post(createObserver(), requestBody)
+//                    IngredientRepository().post(createObserver(), requestBody)
                 } ?: Snackbar.make(view, "入力が不足しています", Snackbar.LENGTH_SHORT).show()
             }
 
@@ -138,7 +136,7 @@ class IngredientFragment : Fragment(),
             binding.fabFix -> {
                 val requestBody = createRequestBody()
                 requestBody?.let {
-                    IngredientRepository().post(createObserver(), requestBody)
+//                    IngredientRepository().post(createObserver(), requestBody)
                 } ?: Snackbar.make(view, "入力が不足しています", Snackbar.LENGTH_SHORT).show()
             }
 
@@ -161,7 +159,7 @@ class IngredientFragment : Fragment(),
 
     /* -------------- server connection ------------------ */
     /** POSTデータ生成. */
-    private fun createRequestBody(): IngredientData? {
+    private fun createRequestBody(): Ingredient? {
         Log.d(TAG, "createRequestBody() called")
 
         if (binding.name.text.isNullOrEmpty()) {
@@ -175,7 +173,7 @@ class IngredientFragment : Fragment(),
             .forEach { genreId = it.id - 1 } // TODO なぜか先頭が2で取れるので調整.
 
         // TODO 追加時はid=0とかでいいか？
-        return IngredientData(
+        return Ingredient(
             0,
             binding.name.text.toString(),
             genreId.toString(),

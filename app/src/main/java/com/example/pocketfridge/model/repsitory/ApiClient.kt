@@ -1,8 +1,8 @@
 package com.example.pocketfridge.model.repsitory
 
-import com.example.pocketfridge.model.response.IngredientData
+import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.response.IngredientResponse
-import okhttp3.RequestBody
+import retrofit2.Response
 import retrofit2.http.*
 import rx.Observable
 
@@ -12,16 +12,16 @@ import rx.Observable
 interface ApiClient {
 
     @GET("ingredient")
-    fun getAllIngredient(): Observable<IngredientResponse>
+    suspend fun getAllIngredient(): Response<IngredientResponse>
 
     @POST("ingredient")
-    fun createIngredient(@Body body: IngredientData): Observable<IngredientResponse>
+    suspend fun createIngredient(@Body body: Ingredient): Observable<IngredientResponse>
 
     @PUT("ingredient/{id}")
-    fun updateIngredient(@Path("id") id: Int, @Body body: IngredientData): Observable<IngredientResponse>
+    suspend fun updateIngredient(@Path("id") id: Int, @Body body: Ingredient): Observable<IngredientResponse>
 
     @DELETE("ingredient/{id}")
-    fun deleteIngredient(@Path("id") id: Int): Observable<IngredientResponse>
+    suspend fun deleteIngredient(@Path("id") id: Int): Observable<IngredientResponse>
 
 
 }

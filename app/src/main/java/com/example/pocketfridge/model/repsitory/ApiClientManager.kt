@@ -21,19 +21,18 @@ class ApiClientManager {
     /** Apiクライアント. */
     fun getApiClient(endpoint: String): ApiClient =
             Retrofit.Builder()
-                    .client(getClient())
-                    .baseUrl(endpoint)
-                    .addConverterFactory(GsonConverterFactory.create(Gson()))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .build()
-                    .create(ApiClient::class.java)
+                .client(getClient())
+                .baseUrl(endpoint)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(ApiClient::class.java)
 
-    /** OkHttpクライアント/ */
+    /** OkHttpクライアント */
     private fun getClient() =
             OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor()
-                            .setLevel(HttpLoggingInterceptor.Level.BODY))
-                    .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
-                    .readTimeout(TIME_OUT, TimeUnit.SECONDS)
-                    .build()
+                .addInterceptor(HttpLoggingInterceptor()
+                    .setLevel(HttpLoggingInterceptor.Level.BODY))
+                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .readTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .build()
 }

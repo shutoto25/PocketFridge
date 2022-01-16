@@ -3,7 +3,7 @@ package com.example.pocketfridge.view.activity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.pocketfridge.databinding.ActivityBaseBinding
+import com.example.pocketfridge.R
 
 /**
  * Fragmentベース画面.
@@ -15,15 +15,10 @@ class BaseActivity : AppCompatActivity() {
         private const val TAG = "BaseActivity"
     }
 
-    /** viewBinding. */
-    private lateinit var binding: ActivityBaseBinding
-
     /* -------------- life cycle ------------------ */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate() called")
-
-        binding = ActivityBaseBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_base)
     }
 }
