@@ -8,7 +8,7 @@ import java.io.Serializable
  */
 data class IngredientResponse(
     /** 取得結果コード. */
-    val resultCode: Int?,
+    val resultCode: Int,
     /** 食材情報一覧. */
     val ingredientList: List<Ingredient>?
 //        /** ユーザー情報. */

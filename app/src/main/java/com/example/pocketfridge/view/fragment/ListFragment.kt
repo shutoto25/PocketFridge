@@ -32,7 +32,8 @@ class ListFragment(private val listData: List<Ingredient>) : Fragment() {
     private val ingredientAdapter: IngredientListAdapter =
         IngredientListAdapter(object : CardClickCallback {
             override fun onCardClick(ingredient: Ingredient) {
-                findNavController().navigate(R.id.action_tab_to_detail)
+                val action = TabFragmentDirections.actionTabToDetail(ingredient)
+                findNavController().navigate(action)
             }
         })
 

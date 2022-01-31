@@ -3,9 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <variable
+            name="isLoading"
+            type="boolean" />
+
+        <variable
+            name="hasData"
+            type="boolean" />
+
         <variable
             name="callback"
-            type="com.example.pocketfridge.view.callback.FabClickCallback" />
+            type="com.example.pocketfridge.view.callback.AddClickCallback" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -19,6 +28,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!-- ツールバー -->
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
@@ -33,41 +43,41 @@
                     app:title="title" />
             </com.google.android.material.appbar.AppBarLayout>
 
+            <!-- タブ -->
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/app_bar"
-                app:tabMode="scrollable" />
+                app:tabMode="scrollable"
+                app:isVisible="@{!isLoading}" />
 
-            <FrameLayout
+            <!-- プログレスサークル -->
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progress_circular"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/tabLayout">
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                app:isVisible="@{isLoading}" />
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+            <!-- リストデータ. -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tabLayout"
+                app:isVisible="@{hasData}" />
 
-                <!-- データ0件. -->
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/noData"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="登録済みのデータがありません"
-                    android:visibility="gone" />
-
-                <!-- Circular progress indicator -->
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/progress_circular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    android:visibility="gone" />
-            </FrameLayout>
+            <!-- データ0件. -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/noData"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tabLayout"
+                android:gravity="center"
+                android:text="登録済みのデータがありません"
+                app:isVisible="@{!hasData}" />
 
             <!-- 追加ボタン -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -78,6 +88,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_margin="16dp"
                 android:contentDescription="add list data"
+                android:onClick="@{() -> callback.onAddClick()}"
                 android:src="@drawable/ic_add_button"
                 app:fabSize="auto" />
         </RelativeLayout>

@@ -14,10 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentTabBinding
-import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.view.adapter.TabContentsPagerAdapter
-import com.example.pocketfridge.view.callback.CardClickCallback
-import com.example.pocketfridge.view.callback.FabClickCallback
+import com.example.pocketfridge.view.callback.AddClickCallback
 import com.example.pocketfridge.viewModel.ListViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
@@ -41,6 +39,13 @@ class TabFragment : Fragment(),
     /** dataBinding. */
     private lateinit var binding: FragmentTabBinding
 
+    /** fab処理. */
+    private val onAddClick = object : AddClickCallback {
+        override fun onAddClick() {
+            findNavController().navigate(R.id.action_tab_to_detail)
+        }
+    }
+
     /* -------------- life cycle ------------------ */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -56,47 +61,46 @@ class TabFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
         binding.apply {
-            callback = object : FabClickCallback {
-                override fun onFabClick() {
-                    findNavController().navigate(R.id.action_tab_to_detail)
-                }
-            }
+            isLoading = true
+            hasData = true
+            callback = onAddClick
         }
 
         viewModel.listLiveData.observe(viewLifecycleOwner) { ingredients ->
             Log.d(TAG, "listLiveData observer.")
-            ingredients?.ingredientList?.let {
+            binding.apply {
+                isLoading = false
                 // viewPager初期化.
-                binding.viewPager.apply {
-                    // アダプタ.
-                    adapter = TabContentsPagerAdapter(this@TabFragment, it)
-                    // スワイプ向き.
-                    orientation = ViewPager2.ORIENTATION_HORIZONTAL
-                    // 保存画面数.
-                    offscreenPageLimit = 3
+                viewPager.apply {
+                    ingredients?.ingredientList?.let {
+                        // アダプタ.
+                        adapter = TabContentsPagerAdapter(this@TabFragment, it)
+                        // スワイプ向き.
+                        orientation = ViewPager2.ORIENTATION_HORIZONTAL
+                        // 保存画面数.
+                        offscreenPageLimit = 3
+                    } ?: run {
+                        hasData = false
+                    }
+                    // viewPagerとtabLayoutを紐付け.
+                    TabLayoutMediator(tabLayout, this) { tab, position ->
+                        tab.text = linkTabToTitle(position)
+                    }.attach()
                 }
             }
-            // viewPagerとtabLayoutを紐付け.
-            TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-                tab.text = when (position) {
-                    0 -> "all"
-                    1 -> "meat"
-                    2 -> "vegetable"
-                    3 -> "fish"
-                    4 -> "Refrigerate"
-                    5 -> "frozen"
-                    6 -> "others"
-                    else -> "" // ありえない
-                }
-            }.attach()
         }
     }
 
     /* -------------- UI ------------------ */
-    /** プログレスサークス設定. */
-    private fun setProgressCircular(isStart: Boolean) {
-        Log.d(TAG, "setProgressCircular() called with: isStart = $isStart")
-        binding.progressCircular.visibility = if (isStart) View.VISIBLE else View.GONE
+    private fun linkTabToTitle(position: Int) = when (position) {
+        0 -> "all"
+        1 -> "meat"
+        2 -> "vegetable"
+        3 -> "fish"
+        4 -> "Refrigerate"
+        5 -> "frozen"
+        6 -> "others"
+        else -> "" // ありえない
     }
 
     /** リスナー設定. */

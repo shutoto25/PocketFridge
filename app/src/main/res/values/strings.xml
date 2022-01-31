@@ -3,4 +3,10 @@
 
     <string name="nav_open">Navigation Drawer Open</string>
     <string name="nav_close">Navigation Drawer Close</string>
+    <string name="id_meat">1</string>
+    <string name="id_vegetable">2</string>
+    <string name="id_fish">3</string>
+    <string name="id_refrigerate">4</string>
+    <string name="id_frozen">5</string>
+    <string name="id_others">6</string>
 </resources>

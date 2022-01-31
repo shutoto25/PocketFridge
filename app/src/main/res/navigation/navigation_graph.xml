@@ -19,13 +19,14 @@
         android:id="@+id/ingredientFragment"
         android:name="com.example.pocketfridge.view.fragment.IngredientFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_ingredient" >
+        tools:layout="@layout/fragment_ingredient">
         <action
             android:id="@+id/action_detail_to_tab"
             app:destination="@id/tabFragment" />
-
-<!--        <argument-->
-<!--            android:name="ingredient"-->
-<!--            app:argType="com.example.pocketfridge.model.data.Ingredient" />-->
+        <argument
+            android:name="ingredient"
+            android:defaultValue="@null"
+            app:argType="com.example.pocketfridge.model.data.Ingredient"
+            app:nullable="true" />
     </fragment>
 </navigation>

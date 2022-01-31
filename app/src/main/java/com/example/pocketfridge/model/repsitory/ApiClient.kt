@@ -15,13 +15,13 @@ interface ApiClient {
     suspend fun getAllIngredient(): Response<IngredientResponse>
 
     @POST("ingredient")
-    suspend fun createIngredient(@Body body: Ingredient): Observable<IngredientResponse>
+    suspend fun createIngredient(@Body body: Ingredient): Response<IngredientResponse>
 
     @PUT("ingredient/{id}")
-    suspend fun updateIngredient(@Path("id") id: Int, @Body body: Ingredient): Observable<IngredientResponse>
+    suspend fun updateIngredient(@Path("id") id: Int, @Body body: Ingredient): Response<IngredientResponse>
 
     @DELETE("ingredient/{id}")
-    suspend fun deleteIngredient(@Path("id") id: Int): Observable<IngredientResponse>
+    suspend fun deleteIngredient(@Path("id") id: Int): Response<IngredientResponse>
 
 
 }

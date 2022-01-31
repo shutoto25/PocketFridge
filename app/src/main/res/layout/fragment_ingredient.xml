@@ -3,9 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <variable
+            name="isAdd"
+            type="boolean" />
+
         <variable
             name="viewModel"
-            type="com.example.pocketfridge.viewModel.ListViewModel" />
+            type="com.example.pocketfridge.viewModel.IngredientViewModel" />
+
+        <variable
+            name="callback"
+            type="com.example.pocketfridge.view.callback.IngredientDetailCallback" />
     </data>
 
     <RelativeLayout
@@ -43,7 +52,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="name"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:text="@{viewModel._name}" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -72,11 +82,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusableInTouchMode="false"
-                    android:hint="expired" />
+                    android:hint="expired"
+                    android:onClick="@{() -> callback.onExpiredBoxClick()}"
+                    app:formatDate="@{viewModel.date}" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- 食材名 -->
+        <!-- ジャンル -->
         <LinearLayout
             android:id="@+id/genreChips"
             android:layout_width="match_parent"
@@ -104,6 +116,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="@{viewModel.genre.equals(@string/id_meat)}"
                     android:text="meat" />
 
                 <com.google.android.material.chip.Chip
@@ -111,6 +124,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="@{viewModel.genre.equals(@string/id_vegetable)}"
                     android:text="vegetable" />
 
                 <com.google.android.material.chip.Chip
@@ -118,6 +132,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="@{viewModel.genre.equals(@string/id_fish)}"
                     android:text="fish" />
 
                 <com.google.android.material.chip.Chip
@@ -125,13 +140,15 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Refrigerate" />
+                    android:checked="@{viewModel.genre.equals(@string/id_refrigerate)}"
+                    android:text="refrigerate" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_child_frozen"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="@{viewModel.genre.equals(@string/id_frozen)}"
                     android:text="frozen" />
 
                 <com.google.android.material.chip.Chip
@@ -139,6 +156,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="@{viewModel.genre.equals(@string/id_others)}"
                     android:text="others" />
 
             </com.google.android.material.chip.ChipGroup>
@@ -166,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
                 android:stepSize="10.0"
-                android:value="100.0"
+                android:value="@{viewModel._left}"
                 android:valueFrom="0.0"
                 android:valueTo="100.0" />
 
@@ -182,9 +200,11 @@
             android:layout_marginStart="60dp"
             android:layout_marginEnd="60dp"
             android:layout_marginBottom="15dp"
+            android:onClick="@{() -> callback.onDeleteClick()}"
             android:text="delete"
             android:visibility="gone"
-            app:fabSize="auto" />
+            app:fabSize="auto"
+            app:isVisible="@{!isAdd}" />
 
         <!-- 修正ボタン -->
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -196,13 +216,15 @@
             android:layout_marginStart="60dp"
             android:layout_marginEnd="60dp"
             android:layout_marginBottom="40dp"
+            android:onClick="@{() -> callback.onFixClick()}"
             android:text="fix"
             android:visibility="gone"
-            app:fabSize="auto" />
+            app:fabSize="auto"
+            app:isVisible="@{!isAdd}" />
 
         <!-- 登録ボタン -->
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab_add"
+            android:id="@+id/fab_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -210,7 +232,9 @@
             android:layout_marginStart="60dp"
             android:layout_marginEnd="60dp"
             android:layout_marginBottom="40dp"
+            android:onClick="@{() -> callback.onRegisterClick()}"
             android:text="put in the fridge"
-            app:fabSize="auto" />
+            app:fabSize="auto"
+            app:isVisible="@{isAdd}" />
     </RelativeLayout>
 </layout>
