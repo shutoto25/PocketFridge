@@ -22,7 +22,9 @@
         tools:layout="@layout/fragment_ingredient">
         <action
             android:id="@+id/action_detail_to_tab"
-            app:destination="@id/tabFragment" />
+            app:destination="@id/tabFragment"
+            app:popUpTo="@id/tabFragment"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="ingredient"
             android:defaultValue="@null"

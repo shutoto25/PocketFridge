@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentIngredientBinding
 import com.example.pocketfridge.view.callback.IngredientDetailCallback
+import com.example.pocketfridge.view.callback.NavigationBack
 import com.example.pocketfridge.viewModel.IngredientViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.ParseException
@@ -28,6 +30,13 @@ class IngredientFragment : Fragment() {
         private const val TAG = "IngredientFragment"
 
         private const val DATE_FORMAT = "yyyy/MM/dd"
+    }
+
+    private val navigationBack = object : NavigationBack {
+        override fun onBack(result: Boolean) {
+            // 前の画面に戻る.
+            findNavController().navigate(R.id.action_detail_to_tab)
+        }
     }
 
     private val args: IngredientFragmentArgs by navArgs()
@@ -54,7 +63,7 @@ class IngredientFragment : Fragment() {
                 calendar.time = date!!
                 calendar.timeInMillis
             }
-            // 日付入力ピッカー.
+            // 日付入力ピッカー. TODO 日付がおかしい、1日前になる
             MaterialDatePicker.Builder.datePicker()
                 .setSelection(selection).build().apply {
                     addOnPositiveButtonClickListener { time: Long ->
@@ -66,19 +75,20 @@ class IngredientFragment : Fragment() {
 
         override fun onRegisterClick() {
             Log.d(TAG, "onRegisterClick() called")
-            viewModel.post()
+            viewModel.post(navigationBack)
 //           Snackbar.make(view, "入力が不足しています", Snackbar.LENGTH_SHORT).show()
         }
 
         override fun onFixClick() {
             Log.d(TAG, "onFixClick() called")
-            viewModel.post()
+            viewModel.put(navigationBack)
 //           Snackbar.make(view, "入力が不足しています", Snackbar.LENGTH_SHORT).show()
         }
 
         override fun onDeleteClick() {
-            viewModel.delete()
             Log.d(TAG, "onDeleteClick() called")
+            // TODO 削除ダイアログくらいは出しておいた方が親切.
+            viewModel.delete(navigationBack)
         }
     }
 
@@ -91,7 +101,7 @@ class IngredientFragment : Fragment() {
         Log.d(TAG, "onCreateView() called")
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ingredient, container, false)
         binding.apply {
-            lifecycleOwner = viewLifecycleOwner
+            lifecycleOwner = this@IngredientFragment
             isAdd = true
             args.ingredient?.also {
                 this@IngredientFragment.viewModel.setData(it)
@@ -103,16 +113,7 @@ class IngredientFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated() called")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart() called")
-    }
-
+    /* -------------- converter ------------------ */
     fun stringToDate(dateStr: String): Date? {
         var date: Date? = null
         try {

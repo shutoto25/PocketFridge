@@ -17,8 +17,8 @@ interface ApiClient {
     @POST("ingredient")
     suspend fun createIngredient(@Body body: Ingredient): Response<IngredientResponse>
 
-    @PUT("ingredient/{id}")
-    suspend fun updateIngredient(@Path("id") id: Int, @Body body: Ingredient): Response<IngredientResponse>
+    @PUT("ingredient")
+    suspend fun updateIngredient(@Body body: Ingredient): Response<IngredientResponse>
 
     @DELETE("ingredient/{id}")
     suspend fun deleteIngredient(@Path("id") id: Int): Response<IngredientResponse>

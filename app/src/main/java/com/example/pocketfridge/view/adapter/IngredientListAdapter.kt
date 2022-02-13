@@ -11,12 +11,11 @@ import com.example.pocketfridge.databinding.IngredientItemBinding
 import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.view.callback.CardClickCallback
 
-
 /**
  * list item adapter.
  */
 class IngredientListAdapter(private val clickCallback: CardClickCallback?) :
-    RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder>(){
+    RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder>() {
 
     companion object {
         /** ログ出力タグ. */
@@ -62,8 +61,10 @@ class IngredientListAdapter(private val clickCallback: CardClickCallback?) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         Log.d(TAG, "onCreateViewHolder() called")
-       val binding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),
-           R.layout.ingredient_item, parent, false) as IngredientItemBinding
+        val binding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.ingredient_item, parent, false
+        ) as IngredientItemBinding
         binding.apply {
             callback = clickCallback
         }
@@ -82,7 +83,7 @@ class IngredientListAdapter(private val clickCallback: CardClickCallback?) :
     /**
      * ビューホルダー.
      */
-    open class IngredientViewHolder(val binding: IngredientItemBinding)
-        : RecyclerView.ViewHolder(binding.root)
+    open class IngredientViewHolder(val binding: IngredientItemBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }
 

@@ -26,3 +26,7 @@ interface IngredientDetailCallback {
     /** 食材削除FAB. */
     fun onDeleteClick()
 }
+
+interface NavigationBack {
+    fun onBack(result :Boolean)
+}

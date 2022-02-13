@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:hint="name"
                     android:inputType="text"
-                    android:text="@{viewModel._name}" />
+                    android:text="@={viewModel.name}" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -84,7 +84,7 @@
                     android:focusableInTouchMode="false"
                     android:hint="expired"
                     android:onClick="@{() -> callback.onExpiredBoxClick()}"
-                    app:formatDate="@{viewModel.date}" />
+                    app:dateTextValue="@={viewModel.date}" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -109,6 +109,7 @@
                 android:id="@+id/chip_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:chipGroupChecked="@={viewModel.genre}"
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
@@ -116,15 +117,15 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="@{viewModel.genre.equals(@string/id_meat)}"
+                    android:checkable="true"
                     android:text="meat" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_child_vegetable"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
+                    android:checkable="true"
                     android:layout_height="wrap_content"
-                    android:checked="@{viewModel.genre.equals(@string/id_vegetable)}"
                     android:text="vegetable" />
 
                 <com.google.android.material.chip.Chip
@@ -132,15 +133,15 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="@{viewModel.genre.equals(@string/id_fish)}"
+                    android:checkable="true"
                     android:text="fish" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_child_Refrigerate"
+                    android:id="@+id/chip_child_refrigerate"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
+                    android:checkable="true"
                     android:layout_height="wrap_content"
-                    android:checked="@{viewModel.genre.equals(@string/id_refrigerate)}"
                     android:text="refrigerate" />
 
                 <com.google.android.material.chip.Chip
@@ -148,7 +149,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="@{viewModel.genre.equals(@string/id_frozen)}"
+                    android:checkable="true"
                     android:text="frozen" />
 
                 <com.google.android.material.chip.Chip
@@ -156,7 +157,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="@{viewModel.genre.equals(@string/id_others)}"
+                    android:checkable="true"
                     android:text="others" />
 
             </com.google.android.material.chip.ChipGroup>
@@ -184,9 +185,9 @@
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
                 android:stepSize="10.0"
-                android:value="@{viewModel._left}"
                 android:valueFrom="0.0"
-                android:valueTo="100.0" />
+                android:valueTo="100.0"
+                app:sliderValue="@={viewModel.left}" />
 
         </LinearLayout>
 

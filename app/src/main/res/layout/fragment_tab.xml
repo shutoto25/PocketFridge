@@ -49,8 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/app_bar"
-                app:tabMode="scrollable"
-                app:isVisible="@{!isLoading}" />
+                app:isVisible="@{!isLoading}"
+                app:tabMode="scrollable" />
 
             <!-- プログレスサークル -->
             <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -86,11 +86,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:contentDescription="add list data"
                 android:onClick="@{() -> callback.onAddClick()}"
                 android:src="@drawable/ic_add_button"
-                app:fabSize="auto" />
+                app:fabSize="auto"
+                app:isVisible="@{!isLoading}" />
         </RelativeLayout>
 
         <!-- ナビゲーションドロワー -->

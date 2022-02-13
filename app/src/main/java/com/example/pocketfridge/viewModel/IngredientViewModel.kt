@@ -5,13 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pocketfridge.model.data.GenreType
 import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.repsitory.IngredientRepository
+import com.example.pocketfridge.view.callback.NavigationBack
 import kotlinx.coroutines.launch
 import java.util.*
-
-// viewのあたいとここの値が常に紐付いている状態にしたい
-// そしてそれをPOSTにわたしたい
 
 /**
  * ViewModel 層の役割
@@ -23,55 +22,38 @@ import java.util.*
  */
 class IngredientViewModel : ViewModel() {
 
+    companion object {
+        /** ログ出力タグ. */
+        private const val TAG = "IngredientViewModel"
+    }
+
     private val repository = IngredientRepository.instance
 
     // id(新規追加時は0)
-    val id = MutableLiveData<Int>()
-    val _id: LiveData<Int> get() = id
-
+    val id = MutableLiveData(0)
     val name = MutableLiveData<String>()
-    val _name: LiveData<String> get() = name
-
     val date = MutableLiveData(Date())
+    val genre = MutableLiveData(GenreType.ALL.id)
+    val left = MutableLiveData(100)
 
-    val genre = MutableLiveData("")
-
-    val left = MutableLiveData<Int>()
-    val _left: LiveData<Int> get() = left
-
-
-    fun setData(ingredient: Ingredient?) {
+    fun setData(ingredient: Ingredient) {
         Log.d("IngredientViewModel", "setData() called with: ingredient = $ingredient")
-        ingredient?.id?.let { id.postValue(it) }
-        ingredient?.name?.let { name.postValue(it) }
-        ingredient?.useByDate?.let { date.value = it }
-        ingredient?.genre?.let { genre.value = it }
-        ingredient?.left?.let { left.postValue(it) }
+        ingredient.id.let { id.value = it }
+        ingredient.name.let { name.value = it }
+        ingredient.useByDate?.let { date.value = it }
+        ingredient.genre.let { genre.value = it }
+        ingredient.left?.let { left.value = it }
     }
 
-    fun post() = viewModelScope.launch {
-        Log.d("IngredientViewModel", "post() called")
+    fun post(navigationBack: NavigationBack) = viewModelScope.launch {
+        Log.d(TAG, "post() called")
         try {
-            createTestRequestBody()?.let {
-                val response = repository.post(it)
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.stackTrace
-        }
-    }
-
-    fun put() = viewModelScope.launch {
-        Log.d("IngredientViewModel", "put() called")
-        try {
-            createTestRequestBody()?.let {
-                val response = repository.put(75, it)
+            if (isValid()) {
+                val response = repository.post(createRequestBody())
+                Log.d(TAG, "post() called with: res = ${response.body()}")
                 if (response.isSuccessful) {
                     response.body()?.let { res ->
-                        Log.d("IngredientViewModel", "put() called with: res = ${res.resultCode}")
+                        navigationBack.onBack(res.resultCode == 0)
                     }
                 }
             }
@@ -80,17 +62,15 @@ class IngredientViewModel : ViewModel() {
         }
     }
 
-    fun delete() = viewModelScope.launch {
-        Log.d("IngredientViewModel", "delete() called")
+    fun put(navigationBack: NavigationBack) = viewModelScope.launch {
+        Log.d(TAG, "put() called")
         try {
-            _id.value?.let {
-                val response = repository.delete(it)
+            if (isValid()) {
+                val response = repository.put(createRequestBody())
                 if (response.isSuccessful) {
                     response.body()?.let { res ->
-                        Log.d(
-                            "IngredientViewModel",
-                            "delete() called with: res = ${res.resultCode}"
-                        )
+                        Log.d(TAG, "put() called with: res = ${res.resultCode}")
+                        navigationBack.onBack(res.resultCode == 0)
                     }
                 }
             }
@@ -98,27 +78,31 @@ class IngredientViewModel : ViewModel() {
             e.stackTrace
         }
     }
+
+    fun delete(navigationBack: NavigationBack) = viewModelScope.launch {
+        Log.d(TAG, "delete() called")
+        try {
+            if (isValid()) {
+                val response = repository.delete(id.value!!)
+                if (response.isSuccessful) {
+                    response.body()?.let { res ->
+                        Log.d(TAG, "delete() called with: res = ${res.resultCode}")
+                        navigationBack.onBack(res.resultCode == 0)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.stackTrace
+        }
+    }
+
+    /** データが有効か. */
+    private fun isValid() = id.value != null || !(name.value.isNullOrEmpty())
 
     /** POSTデータ生成. */
     private fun createRequestBody(): Ingredient {
         return Ingredient(
-            id.value!!,
-            name.value!!,
-            genre.value!!,
-            date.value,
-            null,
-            left.value
-        )
-    }
-
-    private fun createTestRequestBody(): Ingredient {
-        return Ingredient(
-            0,
-            "テスト",
-            "1",
-            Date(),
-            null,
-            100
+            id.value!!, name.value!!, genre.value!!, left.value, date.value, null,
         )
     }
 }

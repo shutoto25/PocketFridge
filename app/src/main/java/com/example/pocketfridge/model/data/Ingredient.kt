@@ -12,11 +12,11 @@ data class Ingredient(
     /** 食材名. */
     val name: String,
     /** ジャンル. */
-    val genre: String,
+    val genre: Int,
+    /** 残量パーセント(left/100). */
+    val left: Int?,
     /** 期限. */
     val useByDate: Date?,
     /** 食材画像. */
-    val image: String?,
-    /** 残量パーセント(left/100). */
-    val left: Int?
+    val image: String?
 ) : Serializable

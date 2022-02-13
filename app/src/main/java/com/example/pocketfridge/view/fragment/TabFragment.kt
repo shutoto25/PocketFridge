@@ -92,6 +92,7 @@ class TabFragment : Fragment(),
     }
 
     /* -------------- UI ------------------ */
+    // TODO これadapter側にうつせない?
     private fun linkTabToTitle(position: Int) = when (position) {
         0 -> "all"
         1 -> "meat"
@@ -117,7 +118,6 @@ class TabFragment : Fragment(),
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         binding.navigationView.setNavigationItemSelectedListener(this)
-
     }
 
     /** ドロワーメニューリスナー設定. */

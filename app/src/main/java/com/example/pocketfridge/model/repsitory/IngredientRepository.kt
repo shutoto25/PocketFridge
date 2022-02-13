@@ -15,13 +15,12 @@ import retrofit2.Response
  */
 class IngredientRepository {
 
-    /** */
+    /** インスタンス. */
     companion object Factory {
         val instance: IngredientRepository
             @Synchronized get() {
                 return IngredientRepository()
             }
-
         /** end point. */
         private const val END_POINT = "https://server-side-fridge-api.herokuapp.com/"
     }
@@ -34,9 +33,9 @@ class IngredientRepository {
     suspend fun post(body: Ingredient): Response<IngredientResponse> =
         ApiClientManager().getApiClient(END_POINT).createIngredient(body)
 
-    /** インデックス[id]のデータ更新. */
-    suspend fun put(id: Int, body: Ingredient): Response<IngredientResponse> =
-        ApiClientManager().getApiClient(END_POINT).updateIngredient(id, body)
+    /** データ更新. */
+    suspend fun put(body: Ingredient): Response<IngredientResponse> =
+        ApiClientManager().getApiClient(END_POINT).updateIngredient(body)
 
     /** インデックス[id]のデータ削除. */
     suspend fun delete(id: Int): Response<IngredientResponse> =
