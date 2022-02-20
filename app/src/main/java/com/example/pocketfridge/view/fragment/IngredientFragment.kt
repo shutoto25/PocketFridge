@@ -12,10 +12,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentIngredientBinding
+import com.example.pocketfridge.view.callback.EventObserver
 import com.example.pocketfridge.view.callback.IngredientDetailCallback
-import com.example.pocketfridge.view.callback.NavigationBack
 import com.example.pocketfridge.viewModel.IngredientViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,13 +32,6 @@ class IngredientFragment : Fragment() {
         private const val TAG = "IngredientFragment"
 
         private const val DATE_FORMAT = "yyyy/MM/dd"
-    }
-
-    private val navigationBack = object : NavigationBack {
-        override fun onBack(result: Boolean) {
-            // 前の画面に戻る.
-            findNavController().navigate(R.id.action_detail_to_tab)
-        }
     }
 
     private val args: IngredientFragmentArgs by navArgs()
@@ -75,20 +70,25 @@ class IngredientFragment : Fragment() {
 
         override fun onRegisterClick() {
             Log.d(TAG, "onRegisterClick() called")
-            viewModel.post(navigationBack)
-//           Snackbar.make(view, "入力が不足しています", Snackbar.LENGTH_SHORT).show()
+            if (viewModel.isValid()) {
+                context?.let { viewModel.post(it) }
+            } else {
+                Snackbar.make(binding.root, "name is required.", Snackbar.LENGTH_SHORT).show()
+            }
         }
 
         override fun onFixClick() {
             Log.d(TAG, "onFixClick() called")
-            viewModel.put(navigationBack)
-//           Snackbar.make(view, "入力が不足しています", Snackbar.LENGTH_SHORT).show()
+            if (viewModel.isValid()) {
+                context?.let { viewModel.put(it) }
+            } else {
+                Snackbar.make(binding.root, "name is required.", Snackbar.LENGTH_SHORT).show()
+            }
         }
 
         override fun onDeleteClick() {
             Log.d(TAG, "onDeleteClick() called")
-            // TODO 削除ダイアログくらいは出しておいた方が親切.
-            viewModel.delete(navigationBack)
+            deleteDialog()
         }
     }
 
@@ -113,6 +113,15 @@ class IngredientFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated() called")
+        // 画面遷移イベントオブザーバー.
+        viewModel.onTransit.observe(viewLifecycleOwner, EventObserver {
+            // 前の画面に戻る.
+            findNavController().navigate(R.id.action_detail_to_tab)
+        })
+    }
     /* -------------- converter ------------------ */
     fun stringToDate(dateStr: String): Date? {
         var date: Date? = null
@@ -122,5 +131,18 @@ class IngredientFragment : Fragment() {
             e.printStackTrace()
         }
         return date
+    }
+
+    fun deleteDialog() {
+        MaterialAlertDialogBuilder(requireContext(),
+            R.style.ThemeOverlay_Material3_MaterialAlertDialog)
+            .setTitle("DELETE")
+            .setMessage("この食材データを削除しますか？")
+            .setIcon(R.drawable.ic_search)
+            .setNegativeButton("cancel") { _, _ ->
+            }
+            .setPositiveButton("accept") { _, _ ->
+                context?.let { viewModel.delete(it) }
+            }.show()
     }
 }

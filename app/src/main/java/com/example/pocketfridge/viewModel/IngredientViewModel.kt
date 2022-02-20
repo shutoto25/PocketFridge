@@ -1,13 +1,16 @@
 package com.example.pocketfridge.viewModel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pocketfridge.R
 import com.example.pocketfridge.model.data.GenreType
 import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.repsitory.IngredientRepository
+import com.example.pocketfridge.view.callback.Event
 import com.example.pocketfridge.view.callback.NavigationBack
 import kotlinx.coroutines.launch
 import java.util.*
@@ -27,6 +30,10 @@ class IngredientViewModel : ViewModel() {
         private const val TAG = "IngredientViewModel"
     }
 
+    /** 画面遷移イベント */
+    private val _onTransit = MutableLiveData<Event<String>>()
+    val onTransit: LiveData<Event<String>> get() = _onTransit
+
     private val repository = IngredientRepository.instance
 
     // id(新規追加時は0)
@@ -45,16 +52,14 @@ class IngredientViewModel : ViewModel() {
         ingredient.left?.let { left.value = it }
     }
 
-    fun post(navigationBack: NavigationBack) = viewModelScope.launch {
+    fun post(context: Context) = viewModelScope.launch {
         Log.d(TAG, "post() called")
         try {
-            if (isValid()) {
-                val response = repository.post(createRequestBody())
-                Log.d(TAG, "post() called with: res = ${response.body()}")
-                if (response.isSuccessful) {
-                    response.body()?.let { res ->
-                        navigationBack.onBack(res.resultCode == 0)
-                    }
+            val response = repository.post(createRequestBody())
+            Log.d(TAG, "post() called with: res = ${response.body()}")
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    onTransit(context.resources.getString(R.string.event_transit_home))
                 }
             }
         } catch (e: Exception) {
@@ -62,16 +67,14 @@ class IngredientViewModel : ViewModel() {
         }
     }
 
-    fun put(navigationBack: NavigationBack) = viewModelScope.launch {
+    fun put(context: Context) = viewModelScope.launch {
         Log.d(TAG, "put() called")
         try {
-            if (isValid()) {
-                val response = repository.put(createRequestBody())
-                if (response.isSuccessful) {
-                    response.body()?.let { res ->
-                        Log.d(TAG, "put() called with: res = ${res.resultCode}")
-                        navigationBack.onBack(res.resultCode == 0)
-                    }
+            val response = repository.put(createRequestBody())
+            Log.d(TAG, "put() called with: res = ${response.body()}")
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    onTransit(context.resources.getString(R.string.event_transit_home))
                 }
             }
         } catch (e: Exception) {
@@ -79,16 +82,14 @@ class IngredientViewModel : ViewModel() {
         }
     }
 
-    fun delete(navigationBack: NavigationBack) = viewModelScope.launch {
+    fun delete(context: Context) = viewModelScope.launch {
         Log.d(TAG, "delete() called")
         try {
-            if (isValid()) {
-                val response = repository.delete(id.value!!)
-                if (response.isSuccessful) {
-                    response.body()?.let { res ->
-                        Log.d(TAG, "delete() called with: res = ${res.resultCode}")
-                        navigationBack.onBack(res.resultCode == 0)
-                    }
+            val response = repository.delete(id.value!!)
+            Log.d(TAG, "delete() called with: res = ${response.body()}")
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    onTransit(context.resources.getString(R.string.event_transit_home))
                 }
             }
         } catch (e: Exception) {
@@ -97,12 +98,17 @@ class IngredientViewModel : ViewModel() {
     }
 
     /** データが有効か. */
-    private fun isValid() = id.value != null || !(name.value.isNullOrEmpty())
+    fun isValid() = id.value != null && !(name.value.isNullOrEmpty())
 
     /** POSTデータ生成. */
     private fun createRequestBody(): Ingredient {
         return Ingredient(
             id.value!!, name.value!!, genre.value!!, left.value, date.value, null,
         )
+    }
+
+    /** 画面遷移イベント更新. */
+    private fun onTransit(event: String) {
+        _onTransit.value = Event(event)
     }
 }

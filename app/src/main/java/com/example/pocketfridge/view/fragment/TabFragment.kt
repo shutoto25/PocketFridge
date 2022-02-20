@@ -15,7 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentTabBinding
 import com.example.pocketfridge.view.adapter.TabContentsPagerAdapter
-import com.example.pocketfridge.view.callback.AddClickCallback
+import com.example.pocketfridge.view.callback.EventObserver
 import com.example.pocketfridge.viewModel.ListViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,19 +32,12 @@ class TabFragment : Fragment(),
     }
 
     /** ViewModel. */
-    private val viewModel by lazy {
+    private val listViewModel by lazy {
         ViewModelProvider(this)[ListViewModel::class.java]
     }
 
     /** dataBinding. */
     private lateinit var binding: FragmentTabBinding
-
-    /** fab処理. */
-    private val onAddClick = object : AddClickCallback {
-        override fun onAddClick() {
-            findNavController().navigate(R.id.action_tab_to_detail)
-        }
-    }
 
     /* -------------- life cycle ------------------ */
     override fun onCreateView(
@@ -52,6 +45,11 @@ class TabFragment : Fragment(),
     ): View {
         Log.d(TAG, "onCreateView() called")
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tab, container, false)
+        binding.apply {
+            isLoading = true
+            hasData = true
+            viewModel = listViewModel
+        }
         // リスナー登録.
         setListeners()
         return binding.root
@@ -60,25 +58,27 @@ class TabFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
-        binding.apply {
-            isLoading = true
-            hasData = true
-            callback = onAddClick
-        }
+        // 画面遷移.
+        listViewModel.onTransit.observe(viewLifecycleOwner, EventObserver {
+            val action = TabFragmentDirections.actionTabToDetail(listViewModel.ingredient)
+            findNavController().navigate(action)
+            listViewModel.ingredient = null
+        })
+    }
 
-        viewModel.listLiveData.observe(viewLifecycleOwner) { ingredients ->
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart() called")
+        listViewModel.listLiveData.observe(viewLifecycleOwner) {
             Log.d(TAG, "listLiveData observer.")
             binding.apply {
                 isLoading = false
                 // viewPager初期化.
                 viewPager.apply {
-                    ingredients?.ingredientList?.let {
-                        // アダプタ.
-                        adapter = TabContentsPagerAdapter(this@TabFragment, it)
-                        // スワイプ向き.
-                        orientation = ViewPager2.ORIENTATION_HORIZONTAL
-                        // 保存画面数.
-                        offscreenPageLimit = 3
+                    listViewModel.ingredientList?.let {
+                        adapter = TabContentsPagerAdapter(this@TabFragment, listViewModel)  // アダプタ.
+                        orientation = ViewPager2.ORIENTATION_HORIZONTAL  // スワイプ向き.
+                        offscreenPageLimit = 3  // 保存画面数.
                     } ?: run {
                         hasData = false
                     }
@@ -92,7 +92,6 @@ class TabFragment : Fragment(),
     }
 
     /* -------------- UI ------------------ */
-    // TODO これadapter側にうつせない?
     private fun linkTabToTitle(position: Int) = when (position) {
         0 -> "all"
         1 -> "meat"

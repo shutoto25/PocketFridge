@@ -4,12 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.example.pocketfridge.R
-import com.google.android.material.button.MaterialButton
+import com.example.pocketfridge.databinding.ActivityMainBinding
+import com.example.pocketfridge.view.callback.EventObserver
+import com.example.pocketfridge.viewModel.LoginViewModel
 
 /**
  * スタート画面.
- * TODO ログイン系はFirebaseで実装予定
  */
 class MainActivity : AppCompatActivity() {
 
@@ -18,17 +21,28 @@ class MainActivity : AppCompatActivity() {
         private const val TAG = "MainActivity"
     }
 
+    /** ViewModel. */
+    private val viewModel by lazy {
+        ViewModelProvider(this)[LoginViewModel::class.java]
+    }
+
+    /** Binding. */
+    private lateinit var binding: ActivityMainBinding
+
     /* -------------- life cycle ------------------ */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate() called")
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.apply {
+            lifecycleOwner = this@MainActivity
+            viewModel = this@MainActivity.viewModel
+        }
 
-        val button = findViewById<MaterialButton>(R.id.button)
-        button.setOnClickListener {
+        viewModel.onLogin.observe(this, EventObserver {
             val intent = Intent(this, BaseActivity::class.java)
             startActivity(intent)
             finish()
-        }
+        })
     }
 }

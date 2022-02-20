@@ -3,21 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.example.pocketfridge.viewModel.ListViewModel" />
         <variable
             name="ingredient"
             type="com.example.pocketfridge.model.data.Ingredient" />
-
-        <variable
-            name="callback"
-            type="com.example.pocketfridge.view.callback.CardClickCallback" />
     </data>
 
     <RelativeLayout
         android:id="@+id/cardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> callback.onCardClick(ingredient)}"
+        android:onClick="@{() -> viewModel.onFixTransit(@string/event_transit_fix, ingredient)}"
         android:orientation="vertical"
         android:padding="10dp">
 

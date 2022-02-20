@@ -7,18 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentListBinding
-import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.view.adapter.IngredientListAdapter
-import com.example.pocketfridge.view.callback.CardClickCallback
+import com.example.pocketfridge.viewModel.ListViewModel
 
 /**
  * 食材一覧表示Fragment.
  */
-class ListFragment(private val listData: List<Ingredient>) : Fragment() {
+class ListFragment(private val tabPosition: Int, viewModel: ListViewModel) : Fragment() {
 
     companion object {
         /** ログ出力タグ. */
@@ -29,13 +27,7 @@ class ListFragment(private val listData: List<Ingredient>) : Fragment() {
     private lateinit var binding: FragmentListBinding
 
     /** Adapter. */
-    private val ingredientAdapter: IngredientListAdapter =
-        IngredientListAdapter(object : CardClickCallback {
-            override fun onCardClick(ingredient: Ingredient) {
-                val action = TabFragmentDirections.actionTabToDetail(ingredient)
-                findNavController().navigate(action)
-            }
-        })
+    private val ingredientAdapter: IngredientListAdapter = IngredientListAdapter(viewModel)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +47,6 @@ class ListFragment(private val listData: List<Ingredient>) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
-        ingredientAdapter.setIngredientList(listData)
+        ingredientAdapter.setIngredientList(tabPosition)
     }
 }

@@ -13,8 +13,8 @@
             type="boolean" />
 
         <variable
-            name="callback"
-            type="com.example.pocketfridge.view.callback.AddClickCallback" />
+            name="viewModel"
+            type="com.example.pocketfridge.viewModel.ListViewModel" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -91,7 +91,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:contentDescription="add list data"
-                android:onClick="@{() -> callback.onAddClick()}"
+                android:onClick="@{() -> viewModel.onTransit(@string/event_transit_new)}"
                 android:src="@drawable/ic_add_button"
                 app:fabSize="auto"
                 app:isVisible="@{!isLoading}" />

@@ -9,4 +9,8 @@
     <string name="id_refrigerate">4</string>
     <string name="id_frozen">5</string>
     <string name="id_others">6</string>
+
+    <string name="event_transit_new">EVENT_NEW</string>
+    <string name="event_transit_fix">EVENT_FIX</string>
+    <string name="event_transit_home">EVENT_HOME</string>
 </resources>
