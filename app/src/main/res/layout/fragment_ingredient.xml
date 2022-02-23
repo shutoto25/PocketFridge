@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="isAdd"
+            type="boolean" />
+
+        <variable
+            name="viewModel"
+            type="com.example.pocketfridge.viewModel.IngredientViewModel" />
+
+        <variable
+            name="callback"
+            type="com.example.pocketfridge.view.callback.IngredientDetailCallback" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/top_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="add screen title"
+            android:textSize="20dp" />
+
+        <!-- 食材名 -->
+        <LinearLayout
+            android:id="@+id/name_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/top_title"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:orientation="vertical">
+
+            <!-- TODO こいつのフォーカスとキーボード制御が必要 -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="name"
+                    android:inputType="text"
+                    android:text="@={viewModel.name}" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- 期限 -->
+        <LinearLayout
+            android:id="@+id/expired"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name_area"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:orientation="horizontal">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIconCheckable="true"
+                app:endIconDrawable="@drawable/ic_expired"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:hint="expired"
+                    android:onClick="@{() -> callback.onExpiredBoxClick()}"
+                    app:dateTextValue="@={viewModel.date}" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- ジャンル -->
+        <LinearLayout
+            android:id="@+id/genreChips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expired"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="30dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="select genre" />
+
+            <!-- TODO 複数ジャンルを設定できるようにしたいが、修正が多いので一旦シングルのみで -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:chipGroupChecked="@={viewModel.genre}"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_child_meat"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="meat" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_child_vegetable"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:checkable="true"
+                    android:layout_height="wrap_content"
+                    android:text="vegetable" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_child_fish"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="fish" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_child_refrigerate"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:checkable="true"
+                    android:layout_height="wrap_content"
+                    android:text="refrigerate" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_child_frozen"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="frozen" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_child_others"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="others" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+
+        <!-- 残りパーセント -->
+        <LinearLayout
+            android:id="@+id/left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/genreChips"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="30dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="choose left" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/percent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:stepSize="10.0"
+                android:valueFrom="0.0"
+                android:valueTo="100.0"
+                app:sliderValue="@={viewModel.left}" />
+
+        </LinearLayout>
+
+        <!-- 削除ボタン -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/fab_fix"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="15dp"
+            android:onClick="@{() -> callback.onDeleteClick()}"
+            android:text="delete"
+            android:visibility="gone"
+            app:fabSize="auto"
+            app:isVisible="@{!isAdd}" />
+
+        <!-- 修正ボタン -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_fix"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="40dp"
+            android:onClick="@{() -> callback.onFixClick()}"
+            android:text="fix"
+            android:visibility="gone"
+            app:fabSize="auto"
+            app:isVisible="@{!isAdd}" />
+
+        <!-- 登録ボタン -->
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="40dp"
+            android:onClick="@{() -> callback.onRegisterClick()}"
+            android:text="put in the fridge"
+            app:fabSize="auto"
+            app:isVisible="@{isAdd}" />
+    </RelativeLayout>
+</layout>

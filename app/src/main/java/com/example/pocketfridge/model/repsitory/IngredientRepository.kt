@@ -1,68 +1,43 @@
 package com.example.pocketfridge.model.repsitory
 
-import android.util.Log
-import com.example.pocketfridge.model.response.IngredientData
+import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.response.IngredientResponse
-import okhttp3.RequestBody
-import rx.Observer
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
-import kotlin.math.E
+import retrofit2.Response
 
 /**
+ * Model 層の役割
+ * Model 層はビジネスロジックとそれに関するデータ管理を受け持ちます。
+ * UI 仕様には依存しないため、
+ * コマンドライン版や別のプラットフォームでも（言語やバイナリの互換性があれば）使い回せます。
+ *
  * サーバデータベース操作リポジトリ.
+ * ViewModelに対するデータプロバイダ.
  */
 class IngredientRepository {
 
-    companion object {
-        /** ログ出力タグ. */
-        private const val TAG = "IngredientRepository"
-
+    /** インスタンス. */
+    companion object Factory {
+        val instance: IngredientRepository
+            @Synchronized get() {
+                return IngredientRepository()
+            }
         /** end point. */
         private const val END_POINT = "https://server-side-fridge-api.herokuapp.com/"
     }
 
-    /** 全データ取得. */
-    fun getAll(observer: Observer<IngredientResponse>) {
-        Log.d(TAG, "getAll() called")
-        ApiClientManager()
-                .getApiClient(END_POINT)
-                .getAllIngredient()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(observer)
-    }
+    /** データ取得. */
+    suspend fun get(): Response<IngredientResponse> =
+        ApiClientManager().getApiClient(END_POINT).getAllIngredient()
 
     /** 新規追加. */
-    fun post(observer: Observer<IngredientResponse>, body: IngredientData) {
-        Log.d(TAG, "post() called")
-        ApiClientManager()
-                .getApiClient(END_POINT)
-                .createIngredient(body)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(observer)
-    }
+    suspend fun post(body: Ingredient): Response<IngredientResponse> =
+        ApiClientManager().getApiClient(END_POINT).createIngredient(body)
 
-    /** インデックス[id]のデータ更新. */
-    fun put(observer: Observer<IngredientResponse>, id: Int, body: IngredientData) {
-        Log.d(TAG, "put() called")
-        ApiClientManager()
-                .getApiClient(END_POINT)
-                .updateIngredient(id, body)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(observer)
-    }
+    /** データ更新. */
+    suspend fun put(body: Ingredient): Response<IngredientResponse> =
+        ApiClientManager().getApiClient(END_POINT).updateIngredient(body)
 
     /** インデックス[id]のデータ削除. */
-    fun delete(observer: Observer<IngredientResponse>, id: Int) {
-        Log.d(TAG, "delete() called")
-        ApiClientManager()
-                .getApiClient(END_POINT)
-                .deleteIngredient(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(observer)
-    }
+    suspend fun delete(id: Int): Response<IngredientResponse> =
+        ApiClientManager().getApiClient(END_POINT).deleteIngredient(id)
 }
