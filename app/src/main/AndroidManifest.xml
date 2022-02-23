@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WhatsInTheFridge">
         <activity
-            android:name="com.example.pocketfridge.view.activity.MainActivity"
+            android:name="com.example.pocketfridge.view.activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

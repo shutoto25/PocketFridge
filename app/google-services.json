@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "954398641477",
+    "project_id": "pocket-fridge-c818c",
+    "storage_bucket": "pocket-fridge-c818c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954398641477:android:30940596ec1842d813422c",
+        "android_client_info": {
+          "package_name": "com.example.pocketfridge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "954398641477-vppjl2vk1qhkkuq16617hkom1q23jl5v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pocketfridge",
+            "certificate_hash": "a3b1bcc946b442b2601098db8d568d3529b269aa"
+          }
+        },
+        {
+          "client_id": "954398641477-nmpj6cmk9n3vpk2gk61lmg19ccd7utb8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxGYTXlpkRc2ox0PH11WFTW3eKCujFFEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "954398641477-nmpj6cmk9n3vpk2gk61lmg19ccd7utb8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

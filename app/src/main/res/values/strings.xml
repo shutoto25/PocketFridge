@@ -10,7 +10,12 @@
     <string name="id_frozen">5</string>
     <string name="id_others">6</string>
 
+    <!-- イベント -->
     <string name="event_transit_new">EVENT_NEW</string>
     <string name="event_transit_fix">EVENT_FIX</string>
     <string name="event_transit_home">EVENT_HOME</string>
+
+    <!-- ログイン画面 -->
+    <string name="guide_sign_in">すでにアカウントをお持ちですか？ ログイン</string>
+    <string name="guide_sign_up">アカウントをお持ちでない場合 登録はこちら</string>
 </resources>

@@ -11,7 +11,6 @@ import com.example.pocketfridge.model.data.GenreType
 import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.repsitory.IngredientRepository
 import com.example.pocketfridge.view.callback.Event
-import com.example.pocketfridge.view.callback.NavigationBack
 import kotlinx.coroutines.launch
 import java.util.*
 
