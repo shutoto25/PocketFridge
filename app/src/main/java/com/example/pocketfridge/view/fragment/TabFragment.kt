@@ -1,5 +1,6 @@
 package com.example.pocketfridge.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentTabBinding
+import com.example.pocketfridge.view.activity.LoginActivity
 import com.example.pocketfridge.view.adapter.TabContentsPagerAdapter
 import com.example.pocketfridge.view.callback.EventObserver
 import com.example.pocketfridge.viewModel.ListViewModel
@@ -121,6 +123,15 @@ class TabFragment : Fragment(),
 
     /** ドロワーメニューリスナー設定. */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        Log.d(TAG, "onNavigationItemSelected() called with: item = ${item.itemId}")
+        when(item.itemId) {
+            R.id.menu_logout -> {
+                listViewModel.logOut()
+                val intent = Intent(context, LoginActivity::class.java)
+                startActivity(intent)
+                activity?.finish()
+            }
+        }
         return false
     }
 

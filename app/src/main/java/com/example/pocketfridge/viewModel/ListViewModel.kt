@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.repsitory.IngredientRepository
+import com.example.pocketfridge.model.repsitory.LoginRepository
 import com.example.pocketfridge.model.response.IngredientResponse
 import com.example.pocketfridge.view.callback.Event
 import kotlinx.coroutines.launch
@@ -79,5 +80,9 @@ class ListViewModel : ViewModel() {
             }
         }
         return mapList
+    }
+
+    fun logOut() {
+        LoginRepository.instance.onSignOut()
     }
 }

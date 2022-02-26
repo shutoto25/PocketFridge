@@ -65,7 +65,6 @@ class LoginRepository {
 
     /** ログアウト. */
     fun onSignOut() {
-        // TODO Googleでログインしている場合もこれでログアウトされる？
         auth.signOut()
     }
 
