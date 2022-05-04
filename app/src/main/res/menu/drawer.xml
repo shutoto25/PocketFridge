@@ -15,9 +15,9 @@
     <item android:title="TITLE!">
         <menu>
             <item
-                android:id="@+id/menu_item3"
+                android:id="@+id/menu_exit_fridge"
                 android:icon="@android:drawable/ic_menu_save"
-                android:title="Save" />
+                android:title="Exit fridge" />
             <item
                 android:id="@+id/menu_logout"
                 android:icon="@android:drawable/ic_menu_delete"

@@ -8,9 +8,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.pocketfridge.R
-import com.example.pocketfridge.databinding.ActivityLoginBinding
+import com.example.pocketfridge.databinding.ActivityUserLoginBinding
 import com.example.pocketfridge.view.callback.EventObserver
-import com.example.pocketfridge.viewModel.LoginViewModel
+import com.example.pocketfridge.viewModel.UserLoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -21,28 +21,27 @@ import com.google.android.material.snackbar.Snackbar
  * ログイン画面
  * (LauncherActivity).
  */
-class LoginActivity : AppCompatActivity() {
+class UserLoginActivity : AppCompatActivity() {
 
     companion object {
         /** ログ出力タグ. */
-        private const val TAG = "LoginActivity"
+        private const val TAG = "UserLoginActivity"
     }
 
     /** Binding. */
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityUserLoginBinding
 
     /** Google Sing in client. */
     private lateinit var googleSignInClient: GoogleSignInClient
 
     /** ViewModel. */
     private val viewModel by lazy {
-        ViewModelProvider(this)[LoginViewModel::class.java]
+        ViewModelProvider(this)[UserLoginViewModel::class.java]
     }
 
     /** Googleサインイン結果. */
     private val googleLoginLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
+        ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             try {
@@ -58,10 +57,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate() called")
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_user_login)
         binding.apply {
-            lifecycleOwner = this@LoginActivity
-            viewModel = this@LoginActivity.viewModel
+            lifecycleOwner = this@UserLoginActivity
+            viewModel = this@UserLoginActivity.viewModel
         }
         initGoogleSignIn()
         setEventObserver()

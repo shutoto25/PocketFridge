@@ -5,22 +5,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pocketfridge.model.repsitory.LoginRepository
+import com.example.pocketfridge.model.repsitory.UserLoginRepository
 import com.example.pocketfridge.view.callback.Event
 import kotlinx.coroutines.launch
 
 /**
  * ログインViewModel.
  */
-class LoginViewModel : ViewModel() {
+class UserLoginViewModel : ViewModel() {
 
     companion object {
         /** ログ出力タグ. */
-        private const val TAG = "LoginViewModel"
+        private const val TAG = "UserLoginViewModel"
     }
 
     /** Firebaseリポジトリ. */
-    private val repository = LoginRepository.instance
+    private val repository = UserLoginRepository.instance
 
     /** ログイン状態イベント. */
     private val _onSign = MutableLiveData<Event<String>>()

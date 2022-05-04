@@ -15,7 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentTabBinding
-import com.example.pocketfridge.view.activity.LoginActivity
+import com.example.pocketfridge.utility.PrefUtil
+import com.example.pocketfridge.view.activity.UserLoginActivity
 import com.example.pocketfridge.view.adapter.TabContentsPagerAdapter
 import com.example.pocketfridge.view.callback.EventObserver
 import com.example.pocketfridge.viewModel.ListViewModel
@@ -124,10 +125,17 @@ class TabFragment : Fragment(),
     /** ドロワーメニューリスナー設定. */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         Log.d(TAG, "onNavigationItemSelected() called with: item = ${item.itemId}")
-        when(item.itemId) {
+        when (item.itemId) {
+            R.id.menu_exit_fridge -> {
+                val pref = PrefUtil(requireContext())
+                pref.removePref(PrefUtil.MY_FRIDGE_ID)
+                pref.removePref(PrefUtil.MY_FRIDGE_NAME)
+                pref.removePref(PrefUtil.MY_FRIDGE_PASSWORD)
+                findNavController().navigate(R.id.action_tab_to_fridgeLogin)
+            }
             R.id.menu_logout -> {
                 listViewModel.logOut()
-                val intent = Intent(context, LoginActivity::class.java)
+                val intent = Intent(context, UserLoginActivity::class.java)
                 startActivity(intent)
                 activity?.finish()
             }

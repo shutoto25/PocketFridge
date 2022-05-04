@@ -2,6 +2,7 @@ package com.example.pocketfridge.utility
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.Nullable
 
 class PrefUtil(private val context: Context) {
 
@@ -9,25 +10,24 @@ class PrefUtil(private val context: Context) {
         // プリファレンスの名前
         private const val PREF_NAME = "app_preferences"
         // ここに定数を書いていく
+        const val MY_FRIDGE_ID = "my_fridge_id"
+        const val MY_FRIDGE_NAME = "my_fridge_name"
+        const val MY_FRIDGE_PASSWORD = "my_fridge_password"
+
+
     }
 
-    /**
-     * String型をプリファレンスに保存
-     */
+    /** String型を保存 */
     fun put(key: String, value: String) {
         writePref().putString(key, value).apply()
     }
 
-    /**
-     * int型をプリファレンスに保存
-     */
+    /** int型を保存 */
     fun put(key: String, value: Int) {
         writePref().putInt(key, value).apply()
     }
 
-    /**
-     * boolean型をプリファレンスに保存
-     */
+    /** boolean型を保存 */
     fun put(key: String, value: Boolean) {
         writePref().putBoolean(key, value).apply()
     }
@@ -39,42 +39,32 @@ class PrefUtil(private val context: Context) {
         writePref().putFloat(key, value).apply()
     }
 
-    /**
-     * long型をプリファレンスに保存
-     */
+    /** long型を保存 */
     fun put(key: String, value: Long) {
         writePref().putLong(key, value).apply()
     }
 
-    /**
-     * String型を取得
-     */
-    fun getPrefString(key: String, defaultVal: String?): String? = readPref().getString(key, defaultVal)
+    /** String型を取得 */
+    fun getPrefString(key: String, @Nullable defValue: String? = null): String? = readPref().getString(key, defValue)
 
 
-    /**
-     * int型を取得
-     */
-    fun getPrefInt(key: String, defaultVal: Int): Int = readPref().getInt(key, defaultVal)
+    /** int型を取得 */
+    fun getPrefInt(key: String, @Nullable defValue: Int = 0): Int = readPref().getInt(key, defValue)
 
 
-    /**
-     * boolean型を取得
-     */
-    fun getPrefBool(key: String, defaultVal: Boolean): Boolean = readPref().getBoolean(key, defaultVal)
+    /** boolean型を取得 */
+    fun getPrefBool(key: String, defValue: Boolean): Boolean = readPref().getBoolean(key, defValue)
 
 
-    /**
-     * float型を取得
-     */
-    fun getPrefFloat(key: String, defaultVal: Float): Float = readPref().getFloat(key, defaultVal)
+    /** float型を取得 */
+    fun getPrefFloat(key: String, defValue: Float): Float = readPref().getFloat(key, defValue)
 
 
-    /**
-     * long型をプリファレンスから取得
-     */
-    fun getPrefLong(key: String, defaultVal: Long): Long = readPref().getLong(key, defaultVal)
+    /** long型を取得 */
+    fun getPrefLong(key: String, defValue: Long): Long = readPref().getLong(key, defValue)
 
+    /** Preference Key削除 */
+    fun removePref(key: String) = writePref().remove(key).commit()
 
     /**
      * プリファレンス取得

@@ -1,11 +1,13 @@
 package com.example.pocketfridge.viewModel
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.repsitory.IngredientRepository
-import com.example.pocketfridge.model.repsitory.LoginRepository
+import com.example.pocketfridge.model.repsitory.UserLoginRepository
 import com.example.pocketfridge.model.response.IngredientResponse
+import com.example.pocketfridge.utility.PrefUtil
 import com.example.pocketfridge.view.callback.Event
 import kotlinx.coroutines.launch
 
@@ -13,7 +15,7 @@ import kotlinx.coroutines.launch
  * ListFragmentに紐づけて、リストが更新したときにアプリ内に保持しているリストも？更新する
  * 更新したときにListFragment側のObserverが反応して更新が走るてきな？LiveData
  */
-class ListViewModel : ViewModel() {
+class ListViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
         /** ログ出力タグ. */
@@ -39,7 +41,8 @@ class ListViewModel : ViewModel() {
     private fun get() = viewModelScope.launch {
         Log.d(TAG, "get() called")
         try {
-            val response = repository.get()
+            val id = PrefUtil(getApplication()).getPrefInt(PrefUtil.MY_FRIDGE_ID)
+            val response = repository.get(id)
             if (response.isSuccessful) {
                 response.body()?.let {
                     it.ingredientList?.let { listData ->
@@ -83,6 +86,6 @@ class ListViewModel : ViewModel() {
     }
 
     fun logOut() {
-        LoginRepository.instance.onSignOut()
+        UserLoginRepository.instance.onSignOut()
     }
 }

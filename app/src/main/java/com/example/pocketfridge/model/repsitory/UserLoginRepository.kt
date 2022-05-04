@@ -10,13 +10,13 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Firebase Authentication連携.
  */
-class LoginRepository {
+class UserLoginRepository {
 
     /** インスタンス. */
     companion object Factory {
-        val instance: LoginRepository
+        val instance: UserLoginRepository
             @Synchronized get() {
-                return LoginRepository()
+                return UserLoginRepository()
             }
     }
 

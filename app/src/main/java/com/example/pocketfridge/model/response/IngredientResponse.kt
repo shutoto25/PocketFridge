@@ -11,6 +11,4 @@ data class IngredientResponse(
     val resultCode: Int,
     /** 食材情報一覧. */
     val ingredientList: List<Ingredient>?
-//        /** ユーザー情報. */
-//        val user: User?
 ) : Serializable

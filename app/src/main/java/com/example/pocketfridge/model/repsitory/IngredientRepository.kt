@@ -1,5 +1,6 @@
 package com.example.pocketfridge.model.repsitory
 
+import androidx.annotation.NonNull
 import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.response.IngredientResponse
 import retrofit2.Response
@@ -26,8 +27,8 @@ class IngredientRepository {
     }
 
     /** データ取得. */
-    suspend fun get(): Response<IngredientResponse> =
-        ApiClientManager().getApiClient(END_POINT).getAllIngredient()
+    suspend fun get(@NonNull groupId :Int): Response<IngredientResponse> =
+        ApiClientManager().getApiClient(END_POINT).getAllIngredient(groupId)
 
     /** 新規追加. */
     suspend fun post(body: Ingredient): Response<IngredientResponse> =
