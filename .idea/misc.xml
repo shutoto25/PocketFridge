@@ -4,12 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.24479166666666666" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.226" />
         <entry key="app/src/main/res/drawable/ic_add_button.xml" value="0.202" />
         <entry key="app/src/main/res/drawable/ic_filter.xml" value="0.202" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.202" />
         <entry key="app/src/main/res/drawable/ic_left.xml" value="0.202" />
         <entry key="app/src/main/res/drawable/ic_notifications.xml" value="0.202" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.202" />
+        <entry key="app/src/main/res/drawable/ic_sync.xml" value="0.226" />
         <entry key="app/src/main/res/layout/activity_base.xml" value="0.10597826086956522" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.3163538873994638" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -29,9 +31,6 @@
         <entry key="app/src/main/res/menu/top_app_bar.xml" value="0.21822916666666667" />
       </map>
     </option>
-  </component>
-  <component name="ProjectPlainTextFileTypeManager">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/pocketfridge/model/data/User.kt" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

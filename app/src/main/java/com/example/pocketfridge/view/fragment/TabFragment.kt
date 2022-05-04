@@ -72,6 +72,11 @@ class TabFragment : Fragment(),
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart() called")
+        setLiveDataObserver()
+    }
+
+    private fun setLiveDataObserver() {
+        Log.d(TAG, "setLiveDataObserver() called")
         listViewModel.listLiveData.observe(viewLifecycleOwner) {
             Log.d(TAG, "listLiveData observer.")
             binding.apply {
@@ -120,6 +125,21 @@ class TabFragment : Fragment(),
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         binding.navigationView.setNavigationItemSelectedListener(this)
+
+        // ツールバーリスナー設定.
+        binding.topAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.reload -> {
+                    binding.isLoading = true
+                    listViewModel.get()
+                    true
+                }
+                R.id.notification -> {
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     /** ドロワーメニューリスナー設定. */

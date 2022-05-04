@@ -34,13 +34,18 @@ class ListViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = IngredientRepository.instance
     var listLiveData: MutableLiveData<IngredientResponse> = MutableLiveData()
 
+    private var connectServerFlg : Boolean = false
+
     init {
         get()
     }
 
-    private fun get() = viewModelScope.launch {
+    fun get() = viewModelScope.launch {
         Log.d(TAG, "get() called")
+
+        if(connectServerFlg) { return@launch }
         try {
+            connectServerFlg  = true
             val id = PrefUtil(getApplication()).getPrefInt(PrefUtil.MY_FRIDGE_ID)
             val response = repository.get(id)
             if (response.isSuccessful) {
@@ -53,6 +58,8 @@ class ListViewModel(application: Application) : AndroidViewModel(application) {
             }
         } catch (e: Exception) {
             e.stackTrace
+        } finally {
+            connectServerFlg = false
         }
     }
 
