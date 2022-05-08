@@ -1,15 +1,15 @@
 package com.example.pocketfridge.viewModel
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.pocketfridge.R
 import com.example.pocketfridge.model.data.GenreType
 import com.example.pocketfridge.model.data.Ingredient
 import com.example.pocketfridge.model.repsitory.IngredientRepository
+import com.example.pocketfridge.utility.DateUtil
+import com.example.pocketfridge.utility.PrefUtil
 import com.example.pocketfridge.view.callback.Event
 import kotlinx.coroutines.launch
 import java.util.*
@@ -22,7 +22,7 @@ import java.util.*
  * UI コンポーネント同士の連携は View 層で行ってはいけません。それは ViewModel 層の仕事です。
  * ViewModel 層は UI コンポーネント（View クラスなど）の型などを知っていてはいけません。それは View 層の仕事です。
  */
-class IngredientViewModel : ViewModel() {
+class IngredientViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object {
         /** ログ出力タグ. */
@@ -33,15 +33,17 @@ class IngredientViewModel : ViewModel() {
     private val _onTransit = MutableLiveData<Event<String>>()
     val onTransit: LiveData<Event<String>> get() = _onTransit
 
+    /** 食材データ更新リポジトリ. */
     private val repository = IngredientRepository.instance
 
     // id(新規追加時は0)
     val id = MutableLiveData(0)
     val name = MutableLiveData<String>()
-    val date = MutableLiveData(Date())
+    val date = MutableLiveData(DateUtil().todayString())
     val genre = MutableLiveData(GenreType.ALL.id)
     val left = MutableLiveData(100)
 
+    /** 食材情報更新時は一度情報を更新する. */
     fun setData(ingredient: Ingredient) {
         Log.d("IngredientViewModel", "setData() called with: ingredient = $ingredient")
         ingredient.id.let { id.value = it }
@@ -51,6 +53,7 @@ class IngredientViewModel : ViewModel() {
         ingredient.left?.let { left.value = it }
     }
 
+    /** 食材データを追加. */
     fun post(context: Context) = viewModelScope.launch {
         Log.d(TAG, "post() called")
         try {
@@ -66,6 +69,7 @@ class IngredientViewModel : ViewModel() {
         }
     }
 
+    /** 食材データを更新. */
     fun put(context: Context) = viewModelScope.launch {
         Log.d(TAG, "put() called")
         try {
@@ -81,6 +85,7 @@ class IngredientViewModel : ViewModel() {
         }
     }
 
+    /** 食材データを削除. */
     fun delete(context: Context) = viewModelScope.launch {
         Log.d(TAG, "delete() called")
         try {
@@ -96,13 +101,19 @@ class IngredientViewModel : ViewModel() {
         }
     }
 
-    /** データが有効か. */
+    /** 登録するデータが有効か. */
     fun isValid() = id.value != null && !(name.value.isNullOrEmpty())
 
     /** POSTデータ生成. */
     private fun createRequestBody(): Ingredient {
         return Ingredient(
-            id.value!!, name.value!!, genre.value!!, left.value, date.value, null,
+            id.value!!,
+            name.value!!,
+            genre.value!!,
+            left.value,
+            date.value,
+            null,
+            PrefUtil(getApplication()).getPrefInt(PrefUtil.MY_FRIDGE_ID) //固定値で現在のグループIDを渡す.
         )
     }
 

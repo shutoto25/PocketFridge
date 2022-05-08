@@ -84,7 +84,7 @@
                     android:focusableInTouchMode="false"
                     android:hint="expired"
                     android:onClick="@{() -> callback.onExpiredBoxClick()}"
-                    app:dateTextValue="@={viewModel.date}" />
+                    android:text="@={viewModel.date}" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 

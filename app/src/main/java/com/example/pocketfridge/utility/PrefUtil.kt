@@ -4,17 +4,18 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.Nullable
 
+/**
+ * プリファレンス ユーティリティクラス.
+ */
 class PrefUtil(private val context: Context) {
 
     companion object {
-        // プリファレンスの名前
+        /** プリファレンスの名前 */
         private const val PREF_NAME = "app_preferences"
         // ここに定数を書いていく
         const val MY_FRIDGE_ID = "my_fridge_id"
         const val MY_FRIDGE_NAME = "my_fridge_name"
         const val MY_FRIDGE_PASSWORD = "my_fridge_password"
-
-
     }
 
     /** String型を保存 */
@@ -32,9 +33,7 @@ class PrefUtil(private val context: Context) {
         writePref().putBoolean(key, value).apply()
     }
 
-    /**
-     * float型をプリファレンスに保存
-     */
+    /** float型を保存 */
     fun put(key: String, value: Float) {
         writePref().putFloat(key, value).apply()
     }
@@ -66,14 +65,10 @@ class PrefUtil(private val context: Context) {
     /** Preference Key削除 */
     fun removePref(key: String) = writePref().remove(key).commit()
 
-    /**
-     * プリファレンス取得
-     */
+    /** Preference取得 */
     private fun readPref(): SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
-    /**
-     * プリファレンス書き込みEditor取得
-     */
+    /** Preference書き込みEditor取得 */
     private fun writePref(): SharedPreferences.Editor {
         return readPref().edit()
     }

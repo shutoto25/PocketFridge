@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentIngredientBinding
+import com.example.pocketfridge.utility.DateUtil
 import com.example.pocketfridge.view.callback.EventObserver
 import com.example.pocketfridge.view.callback.IngredientDetailCallback
 import com.example.pocketfridge.viewModel.IngredientViewModel
@@ -30,13 +32,9 @@ class IngredientFragment : Fragment() {
     companion object {
         /** ログ出力タグ. */
         private const val TAG = "IngredientFragment"
-
-        private const val DATE_FORMAT = "yyyy/MM/dd"
     }
 
     private val args: IngredientFragmentArgs by navArgs()
-    private var longDate: Long = 0
-    private val format = SimpleDateFormat(DATE_FORMAT, Locale.JAPAN)
 
     /** ViewModel. */
     private val viewModel by lazy {
@@ -50,20 +48,21 @@ class IngredientFragment : Fragment() {
     private val callback = object : IngredientDetailCallback {
         override fun onExpiredBoxClick() {
             Log.d(TAG, "onExpiredBoxClick() called")
+
             val calendar = Calendar.getInstance()
-            val selection = if (binding.date.text.isNullOrEmpty()) {
-                calendar.timeInMillis
-            } else {
-                val date = stringToDate(binding.date.text.toString())
-                calendar.time = date!!
-                calendar.timeInMillis
-            }
-            // 日付入力ピッカー. TODO 日付がおかしい、1日前になる
+            // string→data→long
+            DateUtil().stringToDate(viewModel.date.value)?.let { calendar.time = it }
+            val selection = calendar.timeInMillis
+
+            // 日付入力ピッカー.
+            // TODO:bug 日付が1日前になってしまう
+            // →MaterialDataPickerがUTC想定のため発生する問題。原因はわかったので一旦放置。
+            // https://github.com/material-components/material-components-android/issues/714
             MaterialDatePicker.Builder.datePicker()
                 .setSelection(selection).build().apply {
                     addOnPositiveButtonClickListener { time: Long ->
-                        longDate = time
-                        binding.date.setText(format.format(Date(time)))
+                        // long→date→string
+                        viewModel.date.value = DateUtil().dateToString(Date(time))
                     }
                 }.show(parentFragmentManager, "Tag")
         }
@@ -122,18 +121,8 @@ class IngredientFragment : Fragment() {
             findNavController().navigate(R.id.action_detail_to_tab)
         })
     }
-    /* -------------- converter ------------------ */
-    fun stringToDate(dateStr: String): Date? {
-        var date: Date? = null
-        try {
-            date = format.parse(dateStr)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return date
-    }
 
-    fun deleteDialog() {
+    private fun deleteDialog() {
         MaterialAlertDialogBuilder(requireContext(),
             R.style.ThemeOverlay_Material3_MaterialAlertDialog)
             .setTitle("DELETE")

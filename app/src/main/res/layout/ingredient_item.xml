@@ -40,7 +40,7 @@
                 android:id="@+id/useByDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:formatDate="@{ingredient.useByDate}" />
+                android:text="@{ingredient.useByDate}" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/left"

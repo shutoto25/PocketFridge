@@ -8,6 +8,7 @@ import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.example.pocketfridge.R
 import com.example.pocketfridge.model.data.GenreType
+import com.example.pocketfridge.utility.DateUtil
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.TextInputEditText
@@ -23,53 +24,6 @@ object CustomBindingAdapter {
     @BindingAdapter("isVisible")
     fun showHide(view: View, show: Boolean) {
         view.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    /** list表示用date変換アダプタ. */
-    @JvmStatic
-    @BindingAdapter("formatDate")
-    fun TextView.setDate(date: Date?) {
-        val format = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN)
-        try {
-            date?.let {
-                this.text = format.format(date)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-
-    /* -------------- Date(TextInputEditText) ------------------ */
-    @JvmStatic
-    @BindingAdapter("dateTextValue")
-    fun dateTextValue(editText: TextInputEditText, date: Date?) {
-        val format = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN)
-        try {
-            if (date != null && date != editText.text) {
-                editText.setText(format.format(date))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    @JvmStatic
-    @InverseBindingAdapter(attribute = "dateTextValue")
-    fun dateTextValueInverse(editText: TextInputEditText): Date {
-        val format = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN)
-        val text = editText.text.toString()
-        return format.parse(text)!!
-    }
-
-    @JvmStatic
-    @BindingAdapter("dateTextValueAttrChanged")
-    fun dateTextValueListener(
-        editText: TextInputEditText, dateTextValueAttrChange: InverseBindingListener?
-    ) {
-        editText.addTextChangedListener {
-            dateTextValueAttrChange?.onChange()
-        }
     }
 
     /* -------------- ChipGroup ------------------ */
