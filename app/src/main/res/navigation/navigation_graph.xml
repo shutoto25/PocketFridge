@@ -27,6 +27,12 @@
         <action
             android:id="@+id/action_tab_to_detail"
             app:destination="@id/ingredientFragment" />
+        <action
+            android:id="@+id/action_tab_to_camera"
+            app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_tab_to_barcode"
+            app:destination="@id/barcodeFragment" />
 
         <action
             android:id="@+id/action_tab_to_fridgeLogin"
@@ -51,5 +57,31 @@
             android:defaultValue="@null"
             app:argType="com.example.pocketfridge.model.data.Ingredient"
             app:nullable="true" />
+    </fragment>
+
+    <!-- カメラ画面 -->
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.pocketfridge.view.fragment.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera">
+        <action
+            android:id="@+id/action_camera_to_tab"
+            app:destination="@id/tabFragment"
+            app:popUpTo="@id/tabFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- バーコード画面 -->
+    <fragment
+        android:id="@+id/barcodeFragment"
+        android:name="com.example.pocketfridge.view.fragment.BarcodeFragment"
+        android:label="fragment_barcode"
+        tools:layout="@layout/fragment_barcode">
+        <action
+            android:id="@+id/action_barcode_to_tab"
+            app:destination="@id/tabFragment"
+            app:popUpTo="@id/tabFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

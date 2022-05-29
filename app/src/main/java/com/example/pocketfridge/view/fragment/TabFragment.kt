@@ -61,12 +61,6 @@ class TabFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated() called")
-        // 画面遷移.
-        listViewModel.onTransit.observe(viewLifecycleOwner, EventObserver {
-            val action = TabFragmentDirections.actionTabToDetail(listViewModel.ingredient)
-            findNavController().navigate(action)
-            listViewModel.ingredient = null
-        })
     }
 
     override fun onStart() {
@@ -77,6 +71,22 @@ class TabFragment : Fragment(),
 
     private fun setLiveDataObserver() {
         Log.d(TAG, "setLiveDataObserver() called")
+        // 画面遷移.
+        listViewModel.onTransit.observe(viewLifecycleOwner, EventObserver { event ->
+            val action = when (event) {
+                resources.getString(R.string.event_transit_fix),
+                resources.getString(R.string.event_transit_add_text) ->
+                    TabFragmentDirections.actionTabToDetail(listViewModel.ingredient)
+                resources.getString(R.string.event_transit_add_barcode) ->
+                    TabFragmentDirections.actionTabToBarcode()
+                resources.getString(R.string.event_transit_add_camera) ->
+                    TabFragmentDirections.actionTabToCamera()
+                else -> null
+            }
+            action?.let { findNavController().navigate(it) }
+            listViewModel.ingredient = null
+        })
+
         listViewModel.listLiveData.observe(viewLifecycleOwner) {
             Log.d(TAG, "listLiveData observer.")
             binding.apply {

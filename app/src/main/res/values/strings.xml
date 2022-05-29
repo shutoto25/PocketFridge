@@ -11,7 +11,9 @@
     <string name="id_others">6</string>
 
     <!-- イベント -->
-    <string name="event_transit_new">EVENT_NEW</string>
+    <string name="event_transit_add_text">EVENT_ADD_BY_TEXT</string>
+    <string name="event_transit_add_camera">EVENT_ADD_BY_CAMERA</string>
+    <string name="event_transit_add_barcode">EVENT_ADD_BY_BARCODE</string>
     <string name="event_transit_fix">EVENT_FIX</string>
     <string name="event_transit_home">EVENT_HOME</string>
 

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="200">
+        <OnClick
+            motion:clickAction="toggle"
+            motion:targetId="@id/fab_main" />
+    </Transition>
+
+    <!-- アニメーション開始位置 -->
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@id/fab_background">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="BackgroundColor"
+                motion:customColorValue="#00000000" />
+        </Constraint>
+        <Constraint android:id="@id/fab_main">
+            <Layout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent" />
+            <CustomAttribute
+                motion:attributeName="Rotation"
+                motion:customFloatValue="0" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_btn_camera"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="20dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="@id/fab_main"
+                motion:layout_constraintStart_toStartOf="@id/fab_main" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_text_camera"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                motion:layout_constraintBottom_toBottomOf="@id/sub_btn_camera"
+                motion:layout_constraintEnd_toStartOf="@id/sub_btn_camera"
+                motion:layout_constraintTop_toTopOf="@id/sub_btn_camera" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_btn_bar_code"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="20dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="@id/sub_btn_camera"
+                motion:layout_constraintStart_toStartOf="@id/sub_btn_camera" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_text_bar_cord"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                motion:layout_constraintBottom_toBottomOf="@id/sub_btn_bar_code"
+                motion:layout_constraintEnd_toStartOf="@id/sub_btn_bar_code"
+                motion:layout_constraintTop_toTopOf="@id/sub_btn_bar_code" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_btn_writer"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="20dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="@id/sub_btn_bar_code"
+                motion:layout_constraintStart_toStartOf="@id/sub_btn_bar_code" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_text_writer"
+            android:visibility="invisible">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                motion:layout_constraintBottom_toBottomOf="@id/sub_btn_writer"
+                motion:layout_constraintEnd_toStartOf="@id/sub_btn_writer"
+                motion:layout_constraintTop_toTopOf="@id/sub_btn_writer" />
+        </Constraint>
+    </ConstraintSet>
+
+    <!-- アニメーション終了位置 -->
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/fab_background">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <CustomAttribute
+                motion:attributeName="BackgroundColor"
+                motion:customColorValue="#80000000" />
+        </Constraint>
+        <Constraint android:id="@id/fab_main">
+            <Layout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent" />
+            <CustomAttribute
+                motion:attributeName="Rotation"
+                motion:customFloatValue="45" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_btn_camera"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="20dp"
+                motion:layout_constraintBottom_toTopOf="@id/fab_main"
+                motion:layout_constraintEnd_toEndOf="@id/fab_main"
+                motion:layout_constraintStart_toStartOf="@id/fab_main" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_text_camera"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                motion:layout_constraintBottom_toBottomOf="@id/sub_btn_camera"
+                motion:layout_constraintEnd_toStartOf="@id/sub_btn_camera"
+                motion:layout_constraintTop_toTopOf="@id/sub_btn_camera" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_btn_bar_code"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="20dp"
+                motion:layout_constraintBottom_toTopOf="@id/sub_btn_camera"
+                motion:layout_constraintEnd_toEndOf="@id/sub_btn_camera"
+                motion:layout_constraintStart_toStartOf="@id/sub_btn_camera" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_text_bar_cord"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                motion:layout_constraintBottom_toBottomOf="@id/sub_btn_bar_code"
+                motion:layout_constraintEnd_toStartOf="@id/sub_btn_bar_code"
+                motion:layout_constraintTop_toTopOf="@id/sub_btn_bar_code" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_btn_writer"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="20dp"
+                motion:layout_constraintBottom_toTopOf="@id/sub_btn_bar_code"
+                motion:layout_constraintEnd_toEndOf="@id/sub_btn_bar_code"
+                motion:layout_constraintStart_toStartOf="@id/sub_btn_bar_code" />
+        </Constraint>
+        <Constraint
+            android:id="@id/sub_text_writer"
+            android:visibility="visible">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                motion:layout_constraintBottom_toBottomOf="@id/sub_btn_writer"
+                motion:layout_constraintEnd_toStartOf="@id/sub_btn_writer"
+                motion:layout_constraintTop_toTopOf="@id/sub_btn_writer" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

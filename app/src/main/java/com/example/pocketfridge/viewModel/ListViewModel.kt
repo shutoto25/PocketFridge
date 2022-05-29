@@ -69,6 +69,7 @@ class ListViewModel(application: Application) : AndroidViewModel(application) {
      *  ひとまず仮でviewModel内に一時的において渡せるようにするが、気持ち悪いので直したい
      */
     fun onFixTransit(event: String, fixData: Ingredient) {
+        Log.d(TAG, "onFixTransit() called with: event = $event, fixData = $fixData")
         ingredient = fixData
         onTransit(event)
     }

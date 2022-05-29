@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.pocketfridge.viewModel.ListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/motion_fab_scene"
+        tools:showPaths="true">
+
+        <!-- 背景用 -->
+        <View
+            android:id="@+id/fab_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <!-- メインのFab -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_button"
+            tools:layout_editor_absoluteX="339dp"
+            tools:layout_editor_absoluteY="659dp" />
+
+        <!-- カメラ起動 -->
+        <TextView
+            android:id="@+id/sub_text_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="camera"
+            tools:layout_editor_absoluteX="200dp"
+            tools:layout_editor_absoluteY="553dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/sub_btn_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{() -> viewModel.onTransit(@string/event_transit_add_camera)}"
+            android:src="@android:drawable/ic_menu_camera"
+            tools:layout_editor_absoluteX="332dp"
+            tools:layout_editor_absoluteY="560dp" />
+
+        <!-- バーコードリーダー -->
+        <TextView
+            android:id="@+id/sub_text_bar_cord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="barcode"
+            tools:layout_editor_absoluteX="297dp"
+            tools:layout_editor_absoluteY="714dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/sub_btn_bar_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{() -> viewModel.onTransit(@string/event_transit_add_barcode)}"
+            android:src="@android:drawable/ic_menu_call"
+            tools:layout_editor_absoluteX="363dp"
+            tools:layout_editor_absoluteY="723dp" />
+
+        <!-- テキスト入力 -->
+        <TextView
+            android:id="@+id/sub_text_writer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="text"
+            tools:layout_editor_absoluteX="297dp"
+            tools:layout_editor_absoluteY="698dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/sub_btn_writer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{() -> viewModel.onTransit(@string/event_transit_add_text)}"
+            android:src="@android:drawable/ic_menu_search"
+            tools:layout_editor_absoluteX="368dp"
+            tools:layout_editor_absoluteY="691dp" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+</layout>
