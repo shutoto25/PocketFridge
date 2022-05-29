@@ -1,6 +1,7 @@
 package com.example.pocketfridge.viewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,6 +20,7 @@ class CameraViewModel (application: Application) : AndroidViewModel(application)
 
     /** 画面遷移イベント更新. */
     fun takePic() {
+        Log.d(TAG, "takePic() called")
         _onEvent.value = Event("TAKE_PIC")
     }
 }

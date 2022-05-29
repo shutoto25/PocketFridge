@@ -9,24 +9,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.pocketfridge.R
 import com.example.pocketfridge.databinding.FragmentCameraBinding
 import com.example.pocketfridge.view.callback.EventObserver
 import com.example.pocketfridge.viewModel.CameraViewModel
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScanning
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutionException
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
 /**
@@ -41,6 +43,8 @@ class CameraFragment : Fragment() {
         /** ファイル名フォーマット. */
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
+
+    private val args: CameraFragmentArgs by navArgs()
 
     /** ViewModel. */
     private val cameraViewModel by lazy {
@@ -61,6 +65,12 @@ class CameraFragment : Fragment() {
 
     /** バックカメラ指定. */
     private var lensFacing: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    private var analysis: ImageAnalysis? = null
+
+    /** barcode. */
+    private val workerExecutor: ExecutorService = Executors.newSingleThreadExecutor()
+    private val scanner: BarcodeScanner = BarcodeScanning.getClient()
+    private val analyzer: CodeAnalyzer = CodeAnalyzer(scanner)
 
 
     override fun onCreateView(
@@ -86,7 +96,6 @@ class CameraFragment : Fragment() {
                 else -> findNavController().navigate(R.id.action_camera_to_tab)
             }
         })
-
         startCamera()
     }
 
@@ -100,7 +109,6 @@ class CameraFragment : Fragment() {
                 cameraProvider = cameraProviderFuture.get()
 
                 bindCameraUseCases()
-
             } catch (e: ExecutionException) {
                 Log.e(TAG, e.localizedMessage, e)
             } catch (e: InterruptedException) {
@@ -120,13 +128,18 @@ class CameraFragment : Fragment() {
         preview = Preview.Builder().build().also {
             it.setSurfaceProvider(binding.cameraViewFinder.surfaceProvider)
         }
-        // imageCapture.
+
         imageCapture = ImageCapture.Builder().build()
+        analysis = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build().also { it.setAnalyzer(workerExecutor, analyzer) }
+        val useCase: UseCase =
+            if (args.isBarcodeMode) analysis as UseCase else imageCapture as UseCase
 
         // バインドされているカメラを解除.
         cameraProvider.unbindAll()
         // カメラをライフサイクルにバインド.
-        cameraProvider.bindToLifecycle(this, lensFacing, preview, imageCapture)
+        cameraProvider.bindToLifecycle(this, lensFacing, preview, useCase)
     }
 
     /** 撮影. */

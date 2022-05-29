@@ -31,10 +31,6 @@
             android:id="@+id/action_tab_to_camera"
             app:destination="@id/cameraFragment" />
         <action
-            android:id="@+id/action_tab_to_barcode"
-            app:destination="@id/barcodeFragment" />
-
-        <action
             android:id="@+id/action_tab_to_fridgeLogin"
             app:destination="@id/fridgeFragment"
             app:popUpTo="@id/tabFragment"
@@ -68,20 +64,18 @@
         <action
             android:id="@+id/action_camera_to_tab"
             app:destination="@id/tabFragment"
-            app:popUpTo="@id/tabFragment"
+            app:popUpTo="@id/cameraFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_camera_to_detail"
+            app:destination="@id/ingredientFragment"
+            app:popUpTo="@id/cameraFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="isBarcodeMode"
+            android:defaultValue="false"
+            app:argType="boolean"
+            app:nullable="false" />
     </fragment>
 
-    <!-- バーコード画面 -->
-    <fragment
-        android:id="@+id/barcodeFragment"
-        android:name="com.example.pocketfridge.view.fragment.BarcodeFragment"
-        android:label="fragment_barcode"
-        tools:layout="@layout/fragment_barcode">
-        <action
-            android:id="@+id/action_barcode_to_tab"
-            app:destination="@id/tabFragment"
-            app:popUpTo="@id/tabFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
 </navigation>

@@ -78,9 +78,9 @@ class TabFragment : Fragment(),
                 resources.getString(R.string.event_transit_add_text) ->
                     TabFragmentDirections.actionTabToDetail(listViewModel.ingredient)
                 resources.getString(R.string.event_transit_add_barcode) ->
-                    TabFragmentDirections.actionTabToBarcode()
+                    TabFragmentDirections.actionTabToCamera(true)
                 resources.getString(R.string.event_transit_add_camera) ->
-                    TabFragmentDirections.actionTabToCamera()
+                    TabFragmentDirections.actionTabToCamera(false)
                 else -> null
             }
             action?.let { findNavController().navigate(it) }
